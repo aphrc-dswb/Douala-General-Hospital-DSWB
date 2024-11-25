@@ -38,7 +38,7 @@ This repository is created as part of the Data Science Without Borders (DSWB) pr
 ## Contributing
 
 - **Guidelines:** [Contribution Guidelines](link-to-guidelines) for contributors.
-- **Code of Conduct:** [Code of Conduct](link-to-coc) ensures a respectful project environment.
+- **Code of Conduct:** [Code of Conduct]([link-to-coc](https://github.com/aphrc-dswb/Douala-General-Hospital-DSWB/blob/main/CODE_OF_CONDUCT.md)) ensures a respectful project environment.
 - **Resource Plans:** Details on available resources and recommended practices for the project team.
 
 ## Licensing
