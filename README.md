@@ -33,6 +33,7 @@ This repository is created as part of the Data Science Without Borders (DSWB) pr
 - Winston Asanga
 - Melissa tondji
 - Lifafa Kange
+- Mary Chiara
 - **Roles & Responsibilities:** [Team Directory](link-to-directory) outlines roles, responsibilities and their ways of working.
 
 ## Contributing
