@@ -1,0 +1,754 @@
+---
+output:
+  word_document: default
+  html_document: default
+---
+
+# Data cleaning and descriptive analysis of respiratori disease dataset
+
+#1- import all the packages
+
+```{r include=FALSE}
+#1. IMPORT THE PACKAGES
+
+library(readxl)
+library(dplyr)
+library(gtsummary)
+library(sdcMicro)
+library(tidyverse)
+library(lubridate)
+library(reshape2)
+library(officer)
+library(stringi)
+library(stringr)
+library(stringdist)
+library(text2vec)
+
+#creation of fontions 
+
+#creata a fonction
+
+harmonize_characters <- function(var) {
+  var <- str_to_lower(var)                      
+  var <- str_trim(var)                          
+  var <- str_squish(var)                        
+  var <- stri_trans_general(var, "Latin-ASCII") 
+  var <- str_replace_all(var, "[^a-z0-9 ]", "") 
+  return(var)
+}
+```
+
+#2- IMPORT THE DATASET AND DATA DESCRIPTION
+
+```{r warning=FALSE, include=FALSE}
+dataset <- read_excel("C:/Users/ekinz/OneDrive/Desktop/Respiratory diseases database eng_final.xlsx")
+```
+
+#3. DATA PREPROCESSING AND CLEANING
+
+##3.1- de-identification
+
+```{r, echo=FALSE}
+dataset <- dataset %>%
+  select(-c(unique_code,Residence, `Identification number`,Occupation,`Permanent home`,`Immunosuppressive treatment`, `HIV serology during hospitalization`, `Payment method 2 categories`, `HIV status before consultation or hospitalization...106`,`age >= 18 AND years >= 2012 AND groupenosoreel >= 1 AND groupenosoreel ~= 13 AND groupenosoreel ~= 24 AND LieuPEC = 2 AND (becomeh = 1 OR becomeh = 4) (FILTER)`,`Age categories`))
+
+dataset$`previous TB delay (years)`[-1]<-1
+dim(dataset)
+```
+
+##3.2- -DATA EXPLORATION
+
+```{r include=FALSE}
+dataset %>% 
+  tbl_summary(by= Sex)
+```
+
+#3.3- REPLACE THE NA VALUES BY 999
+
+```{r include=FALSE}
+
+
+## Recoding dataset$`Internal Medicine Department` into dataset$`Internal Medicine Department_rec`
+dataset$`Internal Medicine Department_rec` <- dataset$`Internal Medicine Department`
+dataset$`Internal Medicine Department_rec`[dataset$`Internal Medicine Department` == "0"] <- ""
+dataset$`Internal Medicine Department_rec`[dataset$`Internal Medicine Department` == "C3"] <- "C3"
+dataset$`Internal Medicine Department_rec`[dataset$`Internal Medicine Department` == "C4"] <- "C4"
+dataset$`Internal Medicine Department_rec`[is.na(dataset$`Internal Medicine Department`)] <- ""
+
+## Recoding dataset$`Origin service`
+dataset$`Origin service` <- dataset$`Origin service` %>%
+  fct_recode(
+    NULL = "0"
+  )
+
+## Recoding dataset$`location of your Tb ant`
+dataset$`location of your Tb ant` <- dataset$`location of your Tb ant` %>%
+  fct_recode(
+    NULL = "0",
+    NULL = "3"
+  )
+
+
+
+  ## Recoding dataset$`History of chronic renal failure`
+dataset$`History of chronic renal failure` <- dataset$`History of chronic renal failure` %>%
+  fct_recode(
+    "No" = "2"
+  )
+
+## Recoding dataset$`Type of hepatitis`
+dataset$`Type of hepatitis` <- dataset$`Type of hepatitis` %>%
+  fct_recode(
+    NULL = "0"
+  )
+
+
+## Recoding dataset$`Cancer seat`
+dataset$`Cancer seat` <- dataset$`Cancer seat` %>%
+  fct_recode(
+    NULL = "1",
+    "Breast" = "breast",
+    "Breast" = "BREAST",
+    "Breast" = "breasts",
+    "Breast" = "breasts, lungs, liver, lymph nodes",
+    "Breast" = "COLD BREAST",
+    "Breast" = "left breast",
+    "Breast" = "Left breast",
+    "Breast" = "LEFT BREAST",
+    "Breast" = "LEFT BREAST METASTAT"
+  )
+
+## Recoding dataset$`durationHIV (in months)`
+dataset$`durationHIV (in months)` <- dataset$`durationHIV (in months)` %>%
+  as.character() %>%
+  fct_recode(
+    "0.2" = "0.200000002980232"
+  )
+
+## Recoding dataset$`Preventive cotrimoxazole`
+dataset$`Preventive cotrimoxazole` <- dataset$`Preventive cotrimoxazole` %>%
+  fct_recode(
+    NULL = "0"
+  )
+
+## Recoding dataset$ARV
+dataset$ARV <- dataset$ARV %>%
+  fct_recode(
+    "No" = "2"
+  )
+
+## Recoding dataset$`ARV adherence`
+dataset$`ARV adherence` <- dataset$`ARV adherence` %>%
+  fct_recode(
+    "bad" = "0"
+  )
+
+## Recoding dataset$`Ethyl index`
+dataset$`Ethyl index` <- dataset$`Ethyl index` %>%
+  as.character() %>%
+  fct_recode(
+    "0.8" = "0.889999985694885"
+  )
+
+
+## Recoding dataset$`Macroscopy of pleural fluid`
+dataset$`Macroscopy of pleural fluid` <- dataset$`Macroscopy of pleural fluid` %>%
+  fct_explicit_na("not done")
+
+dataset$`name of final diagnosis`<-dataset$`name of final diagnosis` %>%
+   fct_recode(
+    NULL = "3"
+  )
+
+
+## Recoding dataset$`clinical form of tuberculosis`
+dataset$`clinical form of tuberculosis` <- dataset$`clinical form of tuberculosis` %>%
+  fct_recode(
+    NULL = "4"
+  )
+
+## Recoding dataset$`Diagnostic group`
+dataset$`Diagnostic group` <- dataset$`Diagnostic group` %>%
+  fct_recode(
+    NULL = "27",
+    NULL = "28"
+  )
+
+
+## Recoding dataset$`specify diagnosis` into dataset$`specify diagnosis_rec`
+dataset$`specify diagnosis` <- dataset$`specify diagnosis` %>%
+  fct_recode(
+    NULL = "?",
+    NULL = "??",
+    NULL = "???",
+    NULL = "0",
+    NULL = "24",
+    NULL = "File to see",
+    NULL = "file to see??",
+    "HIV" = "hiv"
+  )
+
+## Recoding dataset$`Secondary diagnosis 1`
+dataset$`Secondary diagnosis 1` <- dataset$`Secondary diagnosis 1` %>%
+  fct_recode(
+    NULL = "0"
+  )
+
+
+## Recoding dataset$`TB location`
+dataset$`TB location` <- dataset$`TB location` %>%
+  fct_recode(
+    NULL = "15",
+    NULL = "8"
+  )
+
+## Recoding dataset$`Specify the extrapulmonary location`
+dataset$`Specify the extrapulmonary location` <- dataset$`Specify the extrapulmonary location` %>%
+  fct_recode(
+    "Pleural" = "pleura",
+    "Pleural" = "pleural",
+    "Pleural" = "PLEURAL"
+  )
+
+
+## Recoding dataset$`Complication in hospital`
+dataset$`Complication in hospital` <- dataset$`Complication in hospital` %>%
+  fct_recode(
+    NULL = "1",
+    NULL = "31 07 2013"
+  )
+
+```
+
+#3.4- replace the NA values of numerical data
+
+```{r warning=FALSE, include=FALSE}
+ 
+dataset$Age[is.na(dataset$Age)]<-mean(dataset$Age, na.rm=TRUE)
+
+
+###leukocytes
+dataset <- dataset %>%
+  mutate(`Leukocytes (Per mm3)` = as.numeric(`Leukocytes (Per mm3)`)) %>%
+  mutate(`Leukocytes (Per mm3)` = ifelse(is.na(`Leukocytes (Per mm3)`), 
+                                         mean(`Leukocytes (Per mm3)`, na.rm = TRUE), 
+                                         `Leukocytes (Per mm3)`))
+
+
+###HHemoglobine Tx
+dataset <- dataset %>%
+  mutate(`Hemoglobin Tx` = as.numeric(`Hemoglobin Tx`)) %>%
+  mutate(`Hemoglobin Tx` = ifelse(is.na(`Hemoglobin Tx`), 
+                                         mean(`Hemoglobin Tx`, na.rm = TRUE), 
+                                         `Hemoglobin Tx`))
+
+
+sum(is.na(dataset$`Hemoglobin Tx`))
+dataset$`Hemoglobin Tx`<-as.numeric(dataset$`Hemoglobin Tx`)
+
+## replace the NA values of year of consultation
+
+dataset$`Year of consultation`[is.na(dataset$`Year of consultation`)]<-round(mean(dataset$`Year of consultation`, na.rm=TRUE))
+
+
+### % of lymphocytes in ascites
+dataset$`% of lymphocytes in ascites`<- as.numeric(dataset$`% of lymphocytes in ascites`)
+str(dataset$ `% of lymphocytes in ascites`)
+
+
+
+
+```
+
+```{r,echo=FALSE}
+tbl_summary(dataset,by = Sex)
+```
+
+```{r eval=FALSE, include=FALSE}
+#harmonize characters
+dataset$`type of surgery`<-harmonize_characters(dataset$`type of surgery`)
+# Categorize surgeries into 15 groups
+dataset <- dataset %>%
+  mutate(
+    `type of surgery` = case_when(
+      is.na(`type of surgery`) ~ "No recent surgery",
+      grepl("lung|thoracotomy|lobectomy", `type of surgery`, ignore.case = TRUE) ~ "Thoracic surgery",
+      grepl("appendectomy|hernia|abdominal", `type of surgery`, ignore.case = TRUE) ~ "Abdominal surgery",
+      grepl("knee|hip|spinal|orthopedic|fusion", `type of surgery`, ignore.case = TRUE) ~ "Orthopedic surgery",
+      grepl("heart|coronary|valve", `type of surgery`, ignore.case = TRUE) ~ "Cardiac surgery",
+      grepl("liver|cholecystectomy|hepatic", `type of surgery`, ignore.case = TRUE) ~ "Hepatobiliary surgery",
+      grepl("c-section|hysterectomy|gynecologic", `type of surgery`, ignore.case = TRUE) ~ "Obstetric/Gynecologic surgery",
+      grepl("thyroidectomy|parathyroid|neck", `type of surgery`, ignore.case = TRUE) ~ "Endocrine surgery",
+      grepl("breast|lumpectomy|mastectomy", `type of surgery`, ignore.case = TRUE) ~ "Breast surgery",
+      grepl("craniotomy|neurosurgery|brain", `type of surgery`, ignore.case = TRUE) ~ "Neurosurgery",
+      grepl("prostatectomy|urologic|kidney", `type of surgery`, ignore.case = TRUE) ~ "Urologic surgery",
+      grepl("vascular|bypass|angioplasty", `type of surgery`, ignore.case = TRUE) ~ "Vascular surgery",
+      grepl("plastic|reconstruction|cosmetic", `type of surgery`, ignore.case = TRUE) ~ "Plastic surgery",
+      grepl("ENT|tonsillectomy|sinus", `type of surgery`, ignore.case = TRUE) ~ "ENT surgery",
+      grepl("dermatologic|skin|biopsy", `type of surgery`, ignore.case = TRUE) ~ "Dermatologic surgery",
+      TRUE ~ "Other"
+    )
+  )
+gtsummary::tbl_summary(dataset, by=Sex)
+```
+
+#3.5- clean the categorical variables
+
+```{r eval=FALSE, include=FALSE}
+## Standardize and clean the data
+
+dataset <- dataset %>%
+  mutate(
+    `Cancer seat` = str_to_lower(`Cancer seat`),                      # Convert to lowercase
+    `Cancer seat` = str_trim(`Cancer seat`),                          # Remove extra spaces
+    `Cancer seat` = str_replace_all(`Cancer seat`, "[^a-z, ]", ""),   # Remove special characters
+    `Cancer seat` = ifelse(is.na(`Cancer seat`) | `Cancer seat` == "", "999", `Cancer seat`), # Handle NA or empty values
+    `Cancer seat` = case_when(
+      `Cancer seat` == "999" ~ "999",  # Keep "999" separate for missing/empty values
+      str_detect(`Cancer seat`, "breast") ~ "Breast",       # Groupe : Breast
+      str_detect(`Cancer seat`, "lung|bronchi|pulmonary") ~ "Lung", # Groupe : Lung
+      str_detect(`Cancer seat`, "bone|marrow") ~ "Bone",   # Groupe : Bone
+      str_detect(`Cancer seat`, "skin|kaposi") ~ "Skin",   # Groupe : Skin
+      str_detect(`Cancer seat`, "prostate") ~ "Prostate",  # Groupe : Prostate
+      str_detect(`Cancer seat`, "ovary|uterus|cervix|reproductive|testis|penis|scrotum") ~ "Reproductive Organs", # Groupe : Organes reproductifs (femmes et hommes)
+      TRUE ~ "Others"                                      # Tous les autres (inclut kidney, liver, etc.)
+    )
+  )
+
+
+#Summarize the cancer seat
+summary_data <- dataset %>%
+  group_by(`Cancer seat`) %>%
+  summarise(Count = n()) %>%
+  arrange(desc(Count))
+
+## Recoding dataset$`HIV status before consultation or hospitalization...32`
+dataset$`HIV status before consultation or hospitalization...32` <- dataset$`HIV status before consultation or hospitalization...32` %>%
+  fct_explicit_na("unknown")
+
+##recode the type of surgery
+dataset <- dataset %>%
+  mutate(
+    `type of surgery` = str_to_lower(`type of surgery`),                      # Convert to lowercase
+    `type of surgery` = str_trim(`type of surgery`),                           # Remove extra spaces
+    `type of surgery` = str_replace_all(`type of surgery`, "[^a-z, ]", ""),    # Remove special characters
+    `type of surgery` = ifelse(is.na(`type of surgery`) | `type of surgery` == "", "999", `type of surgery`),  # Handle NA or empty values
+    `type of surgery` = case_when(
+      `type of surgery` == "999" ~ "999",  
+      str_detect(`type of surgery`, "amputation") ~ "Amputation",  # Group: Amputation
+      str_detect(`type of surgery`, "fistula|hernia") ~ "Fistula/Hernia Repair",        # Group: Fistula & Hernia
+      str_detect(`type of surgery`, "appendectomy") ~ "Appendectomy", # Group: Appendectomy
+      str_detect(`type of surgery`, "caesarian|cesarean") ~ "Cesarean Section", # Group: Cesarean Section
+      str_detect(`type of surgery`, "cataract") ~ "Cataract Surgery",  # Group: Cataract
+      str_detect(`type of surgery`, "colectomy|colostomy") ~ "Colorectal Surgery",      # Group: Colectomy & Colostomy
+      str_detect(`type of surgery`, "craniotomy") ~ "Craniotomy",    # Group: Craniotomy
+      str_detect(`type of surgery`, "mastectomy") ~ "Mastectomy",    # Group: Mastectomy
+      str_detect(`type of surgery`, "prostate|kidney") ~ "Prostate & Kidney Surgery", # Group: Prostate & Kidney
+      str_detect(`type of surgery`, "hysterectomy") ~ "Hysterectomy", # Group: Hysterectomy
+      str_detect(`type of surgery`, "osteosynthesis|femur|tibia") ~ "Orthopedic Surgery", # Group: Orthopedic
+      str_detect(`type of surgery`, "thyroidectomy|parotid|cervical cancer") ~ "Cervical Surgery", # Group: Thyroid & Parotid
+      str_detect(`type of surgery`, "laparotomy|nephrectomy") ~ "Laparotomy & Nephrectomy",  # Group: Laparotomy & Nephrectomy
+      TRUE ~ "Others"  # All other surgeries
+    )
+  )
+
+summary_data1 <- dataset %>%
+  group_by(`type of surgery`) %>%
+  summarise(Count = n()) %>%
+  arrange(desc(Count))
+```
+
+#3.6- data cleaning final diagnosis
+
+```{r eval=FALSE, include=FALSE}
+
+dataset$`name of final diagnosis`<-harmonize_characters(dataset$`name of final diagnosis`)
+
+
+
+
+# Categorization based on keywords
+dataset <- dataset %>%
+  mutate(
+    `name of final diagnosis` = case_when(
+      grepl("tuberculosis|tb|tuberculous", `name of final diagnosis`, ignore.case = TRUE) ~ "Tuberculosis",
+      grepl("pneumonia|bronchopneumonia|PNEUMOPATHY", `name of final diagnosis`, ignore.case = TRUE) ~ "Pneumonia",
+      grepl("kaposi", `name of final diagnosis`, ignore.case = TRUE) ~ "Kaposi",
+      grepl("embolism", `name of final diagnosis`, ignore.case = TRUE) ~ "Pulmonary embolism",
+      grepl("asthma", `name of final diagnosis`, ignore.case = TRUE) ~ "Asthma",
+      grepl("bronchitis|bronchopneumopathy", `name of final diagnosis`, ignore.case = TRUE) ~ "Bronchitis",
+      grepl("cancer|adenocarcinoma|metastasis|metastases|tumor|carcinoma|carcinomatous|metastatic|neoplasia",`name of final diagnosis`, ignore.case = TRUE) ~ "Cancer",
+      grepl("copd|CHRONIC OBSTRUCTED",`name of final diagnosis`, ignore.case = TRUE) ~ "COPD",
+      grepl("sepsis|septic",`name of final diagnosis`, ignore.case = TRUE) ~ "sepsis",
+      grepl("COVID 19",`name of final diagnosis`, ignore.case = TRUE) ~ "COVID 19",
+      grepl("stroke|failure|embolism",`name of final diagnosis`, ignore.case = TRUE) ~ "AVC and complication",
+      TRUE ~ "Other"
+    )
+  )
+```
+
+1.  data cleaning of secondary diagnosis1
+
+```{r eval=FALSE, include=FALSE}
+# Define specific diagnostic groups with matching patterns
+diagnostic_groups <- list(
+  "Systemic Lupus Erythematosus" = c("lupus"),
+  "Acute Kidney Injury" = c("acute kidney injury", "AKI", "renal failure"),
+  "Diabetes Mellitus" = c("diabetes", "glycemia", "hyperglycemia"),
+  "Heart Failure" = c("heart failure", "cardiac failure", "decompensated heart"),
+  "Pulmonary Tuberculosis" = c("pulmonary TB", "tuberculosis", "bone TB"),
+  "HIV/AIDS" = c("HIV", "AIDS"),
+  "Lymphoma" = c("lymphoma", "lymphadenopathy"),
+  "Pulmonary Embolism" = c("embolism", "pulmonary embolism"),
+  "Cervical Cancer" = c("cervical cancer", "uterine cancer"),
+  "Severe Anemia" = c("anemia", "severe anemia"),
+  "Peptic Ulcer Disease" = c("ulcer", "gastro", "duodenal"),
+  "Chronic Obstructive Pulmonary Disease (COPD)" = c("COPD", "chronic obstructive"),
+  "Febrile Gastroenteritis" = c("enteritis", "febrile enteritis"),
+  "Ischemic Stroke" = c("stroke", "ischemic", "cerebral infarction"),
+  "Cerebral Toxoplasmosis" = c("toxoplasmosis", "cerebral toxoplasmosis"),
+  "Peritoneal Carcinomatosis" = c("carcinomatosis", "peritoneal cancer"),
+  "Multiple Myeloma" = c("myeloma", "plasma cell disorder"),
+  "Respiratory Failure" = c("respiratory failure", "ARDS"),
+  "Malignant Neoplasm" = c("cancer", "malignant", "carcinoma"),
+  "Other/Uncategorized" = c("complicated", "syndrome")
+)
+
+#replace diagnoses
+dataset$`Secondary diagnosis 1`<-sapply(dataset$`Secondary diagnosis 1`, function(diagnosis){
+  if (is.na(diagnosis)) {
+    return(NA) # Preserve NA
+  }
+  for(group in names(diagnostic_groups)){
+    if (any(grepl(paste(diagnostic_groups[[group]],collapse = "|"), diagnosis, ignore.case = TRUE))){return(group)}
+  }
+  return("other/uncategorized")
+})
+
+
+#regroup secondary diagnosis 2
+regroup_diagnostics <- function(diagnosis1) {
+  case_when(
+    is.na(diagnosis1) ~ "NA",
+    str_detect(diagnosis1, regex("kidney|renal|AKI", ignore_case = TRUE)) ~ "Kidney disorders",
+    str_detect(diagnosis1, regex("chronic kidney|CKD", ignore_case = TRUE)) ~ "Chronic kidney disease",
+    str_detect(diagnosis1, regex("anemia|hemolytic", ignore_case = TRUE)) ~ "Anemia disorders",
+    str_detect(diagnosis1, regex("malnutrition|denutrition", ignore_case = TRUE)) ~ "Nutritional disorders",
+    str_detect(diagnosis1, regex("diabetes|glycemic", ignore_case = TRUE)) ~ "Diabetes complications",
+    str_detect(diagnosis1, regex("infection|sepsis|HIV", ignore_case = TRUE)) ~ "Infectious diseases",
+    str_detect(diagnosis1, regex("stroke|ischemic", ignore_case = TRUE)) ~ "Stroke",
+    str_detect(diagnosis1, regex("heart|cardio", ignore_case = TRUE)) ~ "Cardiac disorders",
+    str_detect(diagnosis1, regex("liver|hepatic", ignore_case = TRUE)) ~ "Liver disorders",
+    str_detect(diagnosis1, regex("neurological|encephal", ignore_case = TRUE)) ~ "Neurological disorders",
+    str_detect(diagnosis1, regex("cancer|neoplasm|tumor", ignore_case = TRUE)) ~ "Cancer",
+    str_detect(diagnosis1, regex("malaria", ignore_case = TRUE)) ~ "Malaria",
+    str_detect(diagnosis1, regex("psycho|depression", ignore_case = TRUE)) ~ "Psychological disorders",
+    str_detect(diagnosis1, regex("thyroid", ignore_case = TRUE)) ~ "Thyroid disorders",
+    str_detect(diagnosis1, regex("gastro|enteritis", ignore_case = TRUE)) ~ "Gastrointestinal disorders",
+    str_detect(diagnosis1, regex("urinary|UTI|pyelonephritis", ignore_case = TRUE)) ~ "Urinary disorders",
+    str_detect(diagnosis1, regex("skin|kaposi|rash", ignore_case = TRUE)) ~ "Dermatological disorders",
+    TRUE ~ "Other"
+  )
+}
+
+# Application des regroupements
+# Apply the regrouping to the column `Secondary diagnosis 2`
+dataset$`Secondary diagnosis 2` <- sapply(dataset$`Secondary diagnosis 2`, regroup_diagnostics)
+
+
+
+
+```
+
+#3.5- ASSESSING THE MISSNG VALUES
+
+```{r include=FALSE}
+data_long <- melt(is.na(dataset))
+tbl_summary(data_long, by=value)
+
+```
+
+```{r include=FALSE}
+### compute the perpectages of non missing data for each variables
+percent_non_missing <- dataset %>%
+  summarise(across(everything(), ~ mean(!is.na(.)) * 100)) %>%
+  pivot_longer(cols = everything(), names_to = "Variable", values_to = "Percent_Non_Missing")
+
+print(percent_non_missing)
+
+list= c()
+
+list<- percent_non_missing$Variable[percent_non_missing$Percent_Non_Missing<10]
+
+list
+#dataset<-dataset [,!names(dataset) %in% list ]
+```
+
+```{r include=FALSE}
+dataset$`Leukocytes (Per mm3)`<-as.numeric(dataset$`Leukocytes (Per mm3)`)
+dataset$`Hemoglobin Tx`<-as.numeric(dataset$`Hemoglobin Tx`)
+dataset$`% of lymphocytes in ascites`<- as.numeric(dataset$`% of lymphocytes in ascites`)
+
+```
+
+#3.6- analyze of the numerical vatiables
+
+```{r include=FALSE}
+##numerical data exploration
+numericaldat<- dataset[sapply(dataset, is.numeric)]
+#as.data.frame(summary(numericaldat))
+
+# Afficher plusieurs graphiques pour chaque variable
+for (var in colnames(numericaldat)) {
+  # Organiser trois graphiques côte à côte
+  par(mfrow = c(1, 3))  # 1 ligne, 3 colonnes
+  
+  # Histogramme
+  hist(numericaldat[[var]], 
+       main = paste("Histogram of", var), 
+       xlab = var, 
+       col = "skyblue", 
+       border = "black")
+  
+  # Boxplot
+  boxplot(numericaldat[[var]], 
+          main = paste("Boxplot of", var), 
+          xlab = var, 
+          col = "lightgreen")
+  
+  # Calculer les statistiques descriptives
+  min_val <- min(numericaldat[[var]], na.rm = TRUE)
+  max_val <- max(numericaldat[[var]], na.rm = TRUE)
+  mean_val <- mean(numericaldat[[var]], na.rm = TRUE)
+  sd_val <- sd(numericaldat[[var]], na.rm = TRUE)
+  median_val <- median(numericaldat[[var]], na.rm = TRUE)
+  q1 <- quantile(numericaldat[[var]], 0.25, na.rm = TRUE)  # 1er quartile
+  q3 <- quantile(numericaldat[[var]], 0.75, na.rm = TRUE)  # 3ème quartile
+  sum_mis<- sum(is.na(numericaldat[[var]]))
+  # Tableau descriptif (affiché sous forme de texte)
+  plot.new()  # Créer un nouveau graphique vide
+  title(main = paste("Statistics of", var))  # Titre
+  
+  # Ajouter les statistiques descriptives comme texte
+  text(0.5, 0.8, paste("Mean (SD): ", round(mean_val, 2), " (", round(sd_val, 2), ")", sep = ""), cex = 1.2)
+  text(0.5, 0.6, paste("Median (Q1, Q3): ", round(median_val, 2), " (", round(q1, 2), ", ", round(q3, 2), ")", sep = ""), cex = 1.2)
+  text(0.5, 0.4, paste("Min: ", round(min_val, 2), sep = ""), cex = 1.2)
+  text(0.5, 0.2, paste("Max: ", round(max_val, 2), sep = ""), cex = 1.2)
+  text(0.5,0.1, paste("Missing values:", round(sum_mis,2),sep = ""), cex= 1.2)
+}
+
+```
+
+### design a summary table of numerical analysis
+
+```{r include=FALSE}
+library(gt)
+
+# Function to calculate the number of outliers
+count_outliers <- function(x) {
+  Q1 <- quantile(x, 0.25, na.rm = TRUE)
+  Q3 <- quantile(x, 0.75, na.rm = TRUE)
+  IQR <- Q3 - Q1
+  lower_bound <- Q1 - 1.5 * IQR
+  upper_bound <- Q3 + 1.5 * IQR
+  sum(x < lower_bound | x > upper_bound, na.rm = TRUE)
+}
+
+# Create the summary table excluding the 'age' variable
+summary_table <- dataset %>%
+  select(where(is.numeric)) %>% # Select only numeric variables
+  summarise(across(
+    everything(),
+    list(
+      Mean = ~ round(mean(., na.rm = TRUE),2),
+      SD = ~ round(sd(., na.rm = TRUE),2),
+      Min = ~ round(min(., na.rm = TRUE),2),
+      Max = ~ round(max(., na.rm = TRUE),2),
+      Outliers = ~ round(count_outliers(.),2),
+      Missing = ~ round(sum(is.na(.)),2)
+    )
+  )) %>%
+  pivot_longer(
+    cols = everything(),
+    names_to = c("Variable",".value"),
+    names_sep = "_"
+  ) %>%
+  arrange(Missing)
+
+goodtable<-summary_table %>% 
+  rownames_to_column("variable") %>% 
+  gt() %>% 
+  tab_header(title = "SUMMARY ANALYSIS OF NUMERICALS VARIABLES") %>% 
+  fmt_number(columns = Mean:Max, decimals = 2) %>% 
+  fmt_number(columns = Outliers:Missing, decimals = 0) %>% 
+  cols_label(
+    Variable="Variable",
+    Mean="Mean",
+    SD ="STD",
+    Min = "Min val",
+    Max ="Max val",
+    Outliers= "Ourliers",
+    Missing= "Missing") %>% 
+  tab_style(
+    style = list (cell_text(weight = "bold")),
+    locations = cells_column_labels(everything())) %>% 
+    tab_options(table.font.size = px(14),
+                table.border.top.color = "black",
+                column_labels.font.weight = "bold",
+                table.border.bottom.color = "black",
+                data_row.padding = px(5))
+                  
+    
+# View the summary table
+goodtable
+```
+
+#6. Data cleaning for all variables except some numericals variable
+
+```{r r,echo=FALSE}
+
+dataset <- dataset %>%
+  # Step 1: Replace missing values (NA) with the mean, excluding some of them
+  mutate(across(where(is.numeric) & !c(`previous TB delay (years)`,`durationHIV (in months)`,`Last CD4 delay in months`,`Last CD4`,`ARV start time (in months)`,`Symptom delay (in days)`,`CD4 count (current or <1 month)`,`clinical form of tuberculosis`,`TB location`,`Smoking index`,`Ethyl index`,`Respiratory rate`,SpO2,`Sedimentation rate`,`Prothrombin rate`,`Pleural proteins (/mm3)`,`Pleural leukocytes (/mm3)`,`ascitic fluid proteins`,`ascites leukocytes`,`% lymphocytes`,`% of lymphocytes in ascites`), ~ ifelse(is.na(.), mean(., na.rm = TRUE), .))) %>%
+  # Step 2: Identify and replace outliers with Q3, excluding some of them
+  mutate(across(where(is.numeric) & !c(`previous TB delay (years)`,`durationHIV (in months)`,`Last CD4 delay in months`,`Last CD4`,`ARV start time (in months)`,`Symptom delay (in days)`,`CD4 count (current or <1 month)`,`clinical form of tuberculosis`,`TB location`,), 
+  function(x) {
+    Q1 <- quantile(x, 0.25, na.rm = TRUE)
+    Q3 <- quantile(x, 0.75, na.rm = TRUE)
+    IQR <- Q3 - Q1
+    lower_bound <- Q1 - 1.5 * IQR
+    upper_bound <- Q3 + 1.5 * IQR
+    # Replace outliers with Q3
+    ifelse(x < lower_bound, Q1, ifelse(x > upper_bound, Q3, x))
+  }))
+
+```
+
+#6.2 - design the summary table after data imputation
+
+```{r,echo=FALSE}
+# Create the summary table excluding the 'age' variable
+summary_table1 <- dataset %>%
+  select(where(is.numeric)) %>% # Select only numeric variables
+  summarise(across(
+    everything(),
+    list(
+      Mean = ~ round(mean(., na.rm = TRUE),2),
+      SD = ~ round(sd(., na.rm = TRUE),2),
+      Min = ~ round(min(., na.rm = TRUE),2),
+      Max = ~ round(max(., na.rm = TRUE),2),
+      Outliers = ~ round(count_outliers(.),2),
+      Missing = ~ round(sum(is.na(.)),2)
+    )
+  )) %>%
+  pivot_longer(
+    cols = everything(),
+    names_to = c("Variable",".value"),
+    names_sep = "_"
+  ) %>% 
+  arrange(Missing)
+
+
+goodtable1<-summary_table1 %>% 
+  rownames_to_column("variable") %>% 
+  gt() %>% 
+  tab_header(title = "SUMMARY ANALYSIS OF NUMERICALS VARIABLES") %>% 
+  fmt_number(columns = Mean:Max, decimals = 2) %>% 
+  fmt_number(columns = Outliers:Missing, decimals = 0) %>% 
+  cols_label(
+    Variable="Variable",
+    Mean="Mean",
+    SD ="STD",
+    Min = "Min val",
+    Max ="Max val",
+    Outliers= "Ourliers",
+    Missing= "Missing") %>% 
+  tab_style(
+    style = list (cell_text(weight = "bold")),
+    locations = cells_column_labels(everything())) %>% 
+    tab_options(table.font.size = px(14),
+                table.border.top.color = "black",
+                column_labels.font.weight = "bold",
+                table.border.bottom.color = "black",
+                data_row.padding = px(5))
+                  
+    
+# View the summary table
+goodtable1
+```
+
+#last data cleaning code
+
+```         
+```
+
+# save the clean dataset
+
+```{r}
+writexl::write_xlsx(dataset,path = "respirdatasetcleangood.xls" )
+```
+
+```{r}
+writexl::write_xlsx(dataset,path = "respirdatasetcleangood.xls" )
+```
+
+descriptive data analysis
+
+```{r echo=FALSE}
+# Generate summary table for categorical variables
+categorical_vars <- names(dataset)[sapply(dataset, function(x) is.factor(x) || is.character(x))]
+
+gtsummary::tbl_summary(
+  dataset,
+  by = Sex,
+  include = categorical_vars
+)
+
+
+```
+
+#numerical data analysis
+
+```{r echo=FALSE}
+
+##numerical data exploration
+numericaldat<- dataset[sapply(dataset, is.numeric)]
+# Afficher plusieurs graphiques pour chaque variable
+for (var in colnames(numericaldat)) {
+  # Organiser trois graphiques côte à côte
+  par(mfrow = c(1, 3))  # 1 ligne, 3 colonnes
+  
+  # Histogramme
+  hist(numericaldat[[var]], 
+       main = paste("Histogram of", var), 
+       xlab = var, 
+       col = "skyblue", 
+       border = "black")
+# Boxplot
+  boxplot(numericaldat[[var]], 
+          main = paste("Boxplot of", var), 
+          xlab = var, 
+          col = "lightgreen")
+  
+  # Calculer les statistiques descriptives
+  min_val <- min(numericaldat[[var]], na.rm = TRUE)
+  max_val <- max(numericaldat[[var]], na.rm = TRUE)
+  mean_val <- mean(numericaldat[[var]], na.rm = TRUE)
+  sd_val <- sd(numericaldat[[var]], na.rm = TRUE)
+  median_val <- median(numericaldat[[var]], na.rm = TRUE)
+  q1 <- quantile(numericaldat[[var]], 0.25, na.rm = TRUE)  # 1er quartile
+  q3 <- quantile(numericaldat[[var]], 0.75, na.rm = TRUE)  # 3ème quartile
+  sum_mis<- sum(is.na(numericaldat[[var]]))
+  # Tableau descriptif (affiché sous forme de texte)
+  plot.new()  # Créer un nouveau graphique vide
+  title(main = paste("Statistics of", var))  # Titre
+  
+  # Ajouter les statistiques descriptives comme texte
+  text(0.5, 0.8, paste("Mean (SD): ", round(mean_val, 2), " (", round(sd_val, 2), ")", sep = ""), cex = 1.2)
+  text(0.5, 0.6, paste("Median (Q1, Q3): ", round(median_val, 2), " (", round(q1, 2), ", ", round(q3, 2), ")", sep = ""), cex = 1.2)
+  text(0.5, 0.4, paste("Min: ", round(min_val, 2), sep = ""), cex = 1.2)
+  text(0.5, 0.2, paste("Max: ", round(max_val, 2), sep = ""), cex = 1.2)
+  text(0.5,0.1, paste("Missing values:", round(sum_mis,2),sep = ""), cex= 1.2)
+}
+
+```
