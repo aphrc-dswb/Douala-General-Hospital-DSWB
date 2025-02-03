@@ -1,6 +1,6 @@
-# Douala General Hospital's Main Repository in DSWB
+Douala General Hospital's Main Repository in DSWB
 
-*This repository is an open platform for sharing, collaborating, and advancing open science initiatives within the Data Science Without Borders (DSWB) project to improve healthcare services at Douala General Hospital.*  
+An open platform for collaboration, innovation, and advancing open science initiatives within the Data Science Without Borders (DSWB) project to enhance healthcare services at Douala General Hospital.
 
 ## Vision and Mission
 
