@@ -52,7 +52,7 @@ We welcome contributions from the community! Please check our guidelines before 
 ---
 ## 📜 Licensing
 
-This project is licensed under the **MIT License** – see the **LICENSE.md** file for details.
+This project is licensed under the **MIT License** – see the **LICENSE.md(https://github.com/aphrc-dswb/Douala-General-Hospital-DSWB/blob/main/LICENSE.md)** file for details.
 
 ---
 ## 📖 Citing & Acknowledgment
