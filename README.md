@@ -37,7 +37,17 @@ This repository is created as part of the Data Science Without Borders (DSWB) pr
 - **Cyrill Fomazo**-Data scientist
 - **Lifafa Kange**-Statistician
 - **Serena Agbor**-Data scientist
-### **🔹 Roles & Responsibilities** [Team Directory](link-to-directory) outlines roles, responsibilities and their ways of working.
+- [Brenda Yankam](https://github.com/BrendaYankam/BrendaYankam)-Statistician
+- [Anicet Onana](https://github.com/onana-anicet)-Project coordinator
+- [Luc Fankoua](https://github.com/Luc-baudoin237)-Data manager
+- [Raisa Manemik](https://github.com/ManemikRaissa)-Monitoring and evaluation
+- [Winston Asanga](https://github.com/ngu6768)-Research assistant
+- [Cyrill Fomazo](https://github.com/briceket23)-Data scientist
+- [Lifafa Kange](https://github.com/LifafaKange)-Statistician
+- [Serena Agbor](https://github.com/serena-create)-Data scientist
+
+
+### **🔹 Roles & Responsibilities** [Team Directory]((https://github.com/onana-anicet) outlines roles, responsibilities and their ways of working.
 
 ## 🤝 Contributing
 
