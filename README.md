@@ -17,7 +17,7 @@ This repository is created as part of the Data Science Without Borders (DSWB) pr
 - Promote open science by making datasets and research outputs publicly accessible.
 - Develop data-driven solutions to enhance hospital operations and patient care.
 - Create reusable and reproducible analysis pipelines.
-- 
+  
 - **Outcomes:**
 - Publicly available datasets and analysis scripts adhering to open science principles.
 - Scalable and reproducible solutions for healthcare challenges.
