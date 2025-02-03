@@ -29,8 +29,8 @@ This repository is created as part of the Data Science Without Borders (DSWB) pr
 
 - **Members:** A multidisciplinary team of data scientists, researchers, and healthcare professionals contributing to the Data Science Without Borders initiative:
 ### **📌 Core Members:**
-- **[Dr. Brenda Yankam](https://github.com/BrendaYankam/BrendaYankam)**-Statistician
 - **[Dr. Anicet Onana](https://github.com/onana-anicet)**-Project coordinator
+- **[Dr. Brenda Yankam](https://github.com/BrendaYankam/BrendaYankam)**-Statistician
 - **[Luc Fankoua](https://github.com/Luc-baudoin237)**-Data manager
 - **[Raisa Manemik](https://github.com/ManemikRaissa)**-Monitoring and evaluation
 - **[Winston Asanga](https://github.com/ngu6768)**-Research assistant
@@ -39,7 +39,7 @@ This repository is created as part of the Data Science Without Borders (DSWB) pr
 - **[Serena Agbor](https://github.com/serena-create)**-Data scientist
 
 
-### **🔹 Roles & Responsibilities** [Team Directory]((https://github.com/onana-anicet) outlines roles, responsibilities and their ways of working.
+### **🔹 Roles & Responsibilities** [Team Directory](https://github.com/onana-anicet) outlines roles, responsibilities and their ways of working.
 
 ## 🤝 Contributing
 
