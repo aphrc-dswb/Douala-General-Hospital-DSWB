@@ -1,0 +1,26 @@
+-- OBSERVATION_PERIOD
+
+-- Step 1: Ensure sequence exists for observation_period_id
+
+CREATE SEQUENCE IF NOT EXISTS "tb_cdm"."observation_period_id_seq"
+    START WITH 1
+    INCREMENT BY 1
+    OWNED BY "tb_cdm"."observation_period".observation_period_id;
+
+-- Step 2: Insert into observation_period 
+INSERT INTO "tb_cdm"."observation_period" (
+    observation_period_id,
+    person_id,
+    observation_period_start_date,
+    observation_period_end_date,
+    period_type_concept_id
+)
+SELECT
+    nextval('"tb_cdm"."observation_period_id_seq"') AS observation_period_id,
+    p.person_id,
+    TO_DATE(s.year_of_treatment_start::text || '-01-01', 'YYYY-MM-DD') AS observation_period_start_date,
+    TO_DATE(s.year_of_treatment_start::text || '-12-31', 'YYYY-MM-DD') AS observation_period_end_date, -- Default to end of same year
+    32818 AS period_type_concept_id -- EHR administration record
+FROM "tb_dgh_2009_2022" s
+JOIN "tb_cdm"."person" p
+  ON p.person_source_value = s.uniqueid;

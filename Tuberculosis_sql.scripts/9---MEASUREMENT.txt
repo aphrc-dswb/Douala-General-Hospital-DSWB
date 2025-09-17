@@ -1,0 +1,781 @@
+-- MEASUREMENT
+-- Step 1: Ensure sequence exists for measurement_id
+
+CREATE SEQUENCE IF NOT EXISTS "tb_cdm".measurement_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    OWNED BY "tb_cdm".measurement.measurement_id;
+
+
+-- Step 2: Insert into measurement table
+
+INSERT INTO "tb_cdm".measurement (
+    measurement_id,
+    person_id,
+    measurement_date,
+    measurement_datetime,
+    measurement_time,
+    measurement_type_concept_id,
+    measurement_concept_id,
+    measurement_source_concept_id,
+    measurement_source_value,
+    operator_concept_id,
+    value_as_number,
+    value_as_concept_id,
+    range_low,
+    range_high,
+    provider_id,
+    visit_occurrence_id,
+    visit_detail_id,
+    unit_source_value,
+    unit_source_concept_id,
+    value_source_value,
+    measurement_event_id,
+    meas_event_field_concept_id,
+    unit_concept_id
+)
+
+-- Hemoglobin
+SELECT nextval('"tb_cdm".measurement_id_seq'), p.person_id,
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD') AS measurement_date,
+       NULL::timestamp AS measurement_datetime,
+       NULL::time AS measurement_time,
+       32818 AS measurement_type_concept_id,
+       3000963 AS measurement_concept_id, -- Hemoglobin
+       NULL::integer AS measurement_source_concept_id,
+       'hemoglobin' AS measurement_source_value,
+       NULL::integer AS operator_concept_id,
+       s.hemoglobin::numeric AS value_as_number,
+       NULL::integer AS value_as_concept_id,
+       NULL::numeric AS range_low,
+       NULL::numeric AS range_high,
+       NULL::integer AS provider_id,
+       NULL::integer AS visit_occurrence_id,
+       NULL::integer AS visit_detail_id,
+       NULL::text AS unit_source_value,
+       NULL::integer AS unit_source_concept_id,
+       s.hemoglobin::text AS value_source_value,
+       NULL::bigint AS measurement_event_id,
+       NULL::integer AS meas_event_field_concept_id,
+       8713 AS unit_concept_id -- g/dL
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+WHERE s.hemoglobin IS NOT NULL
+
+UNION ALL
+-- Leukocytes
+SELECT nextval('"tb_cdm".measurement_id_seq'), p.person_id,
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD') AS measurement_date,
+       NULL::timestamp AS measurement_datetime,
+       NULL::time AS measurement_time,
+       32818 AS measurement_type_concept_id,
+       3013721 AS measurement_concept_id, -- Leukocytes
+       NULL::integer AS measurement_source_concept_id,
+       'leukocytes' AS measurement_source_value,
+       NULL::integer AS operator_concept_id,
+       s.leukocytes::numeric AS value_as_number,
+       NULL::integer AS value_as_concept_id,
+       NULL::numeric AS range_low,
+       NULL::numeric AS range_high,
+       NULL::integer AS provider_id,
+       NULL::integer AS visit_occurrence_id,
+       NULL::integer AS visit_detail_id,
+       NULL::text AS unit_source_value,
+       NULL::integer AS unit_source_concept_id,
+       s.leukocytes::text AS value_source_value,
+       NULL::bigint AS measurement_event_id,
+       NULL::integer AS meas_event_field_concept_id,
+       8636 AS unit_concept_id -- g/L
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+WHERE s.leukocytes IS NOT NULL
+
+UNION ALL
+-- current_weight
+SELECT nextval('"tb_cdm".measurement_id_seq'), p.person_id,
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD') AS measurement_date,
+       NULL::timestamp AS measurement_datetime,
+       NULL::time AS measurement_time,
+       32818 AS measurement_type_concept_id,
+       4099154 AS measurement_concept_id, -- Weight 
+       NULL::integer AS measurement_source_concept_id,
+       'current_weight' AS measurement_source_value,
+       4172703 AS operator_concept_id,
+       s.current_weight::numeric AS value_as_number,
+       NULL::integer AS value_as_concept_id,
+       NULL::numeric AS range_low,
+       NULL::numeric AS range_high,
+       NULL::integer AS provider_id,
+       NULL::integer AS visit_occurrence_id,
+       NULL::integer AS visit_detail_id,
+       NULL::text AS unit_source_value,
+       NULL::integer AS unit_source_concept_id,
+       s.current_weight::text AS value_source_value,
+       NULL::bigint AS measurement_event_id,
+       NULL::integer AS meas_event_field_concept_id,
+       9529 AS unit_concept_id -- kg
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+WHERE s.current_weight IS NOT NULL
+
+UNION ALL
+-- neutrophils
+SELECT nextval('"tb_cdm".measurement_id_seq'), p.person_id,
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD') AS measurement_date,
+       NULL::timestamp AS measurement_datetime,
+       NULL::time AS measurement_time,
+       32818 AS measurement_type_concept_id,
+       36308680 AS measurement_concept_id, -- neutrophils
+       NULL::integer AS measurement_source_concept_id,
+       'neutrophils' AS measurement_source_value,
+       NULL::integer AS operator_concept_id,
+       s.neutrophils::numeric AS value_as_number,
+       NULL::integer AS value_as_concept_id,
+       NULL::numeric AS range_low,
+       NULL::numeric AS range_high,
+       NULL::integer AS provider_id,
+       NULL::integer AS visit_occurrence_id,
+       NULL::integer AS visit_detail_id,
+       NULL::text AS unit_source_value,
+       NULL::integer AS unit_source_concept_id,
+       s.neutrophils::text AS value_source_value,
+       NULL::bigint AS measurement_event_id,
+       NULL::integer AS meas_event_field_concept_id,
+       8554 AS unit_concept_id -- %
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+WHERE s.neutrophils IS NOT NULL
+
+UNION ALL
+-- eosinophils
+SELECT nextval('"tb_cdm".measurement_id_seq'), p.person_id,
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD') AS measurement_date,
+       NULL::timestamp AS measurement_datetime,
+       NULL::time AS measurement_time,
+       32818 AS measurement_type_concept_id,
+       37399255 AS measurement_concept_id, -- eosinophils
+       NULL::integer AS measurement_source_concept_id,
+       'eosinophils' AS measurement_source_value,
+       NULL::integer AS operator_concept_id,
+       s.eosinophils::numeric AS value_as_number,
+       NULL::integer AS value_as_concept_id,
+       NULL::numeric AS range_low,
+       NULL::numeric AS range_high,
+       NULL::integer AS provider_id,
+       NULL::integer AS visit_occurrence_id,
+       NULL::integer AS visit_detail_id,
+       NULL::text AS unit_source_value,
+       NULL::integer AS unit_source_concept_id,
+       s.eosinophils::text AS value_source_value,
+       NULL::bigint AS measurement_event_id,
+       NULL::integer AS meas_event_field_concept_id,
+       8554 AS unit_concept_id -- %
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+WHERE s.eosinophils IS NOT NULL
+
+UNION ALL
+-- lymphocytes
+SELECT nextval('"tb_cdm".measurement_id_seq'), p.person_id,
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD') AS measurement_date,
+       NULL::timestamp AS measurement_datetime,
+       NULL::time AS measurement_time,
+       32818 AS measurement_type_concept_id,
+       37399254 AS measurement_concept_id, -- lymphocytes
+       NULL::integer AS measurement_source_concept_id,
+       'lymphocytes' AS measurement_source_value,
+       NULL::integer AS operator_concept_id,
+       s.lymphocytes::numeric AS value_as_number,
+       NULL::integer AS value_as_concept_id,
+       NULL::numeric AS range_low,
+       NULL::numeric AS range_high,
+       NULL::integer AS provider_id,
+       NULL::integer AS visit_occurrence_id,
+       NULL::integer AS visit_detail_id,
+       NULL::text AS unit_source_value,
+       NULL::integer AS unit_source_concept_id,
+       s.lymphocytes::text AS value_source_value,
+       NULL::bigint AS measurement_event_id,
+       NULL::integer AS meas_event_field_concept_id,
+       8554 AS unit_concept_id -- %
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+WHERE s.lymphocytes IS NOT NULL
+
+UNION ALL
+-- basophils
+SELECT nextval('"tb_cdm".measurement_id_seq'), p.person_id,
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD') AS measurement_date,
+       NULL::timestamp AS measurement_datetime,
+       NULL::time AS measurement_time,
+       32818 AS measurement_type_concept_id,
+       37398606 AS measurement_concept_id, -- basophils
+       NULL::integer AS measurement_source_concept_id,
+       'basophils' AS measurement_source_value,
+       NULL::integer AS operator_concept_id,
+       s.basophils::numeric AS value_as_number,
+       NULL::integer AS value_as_concept_id,
+       NULL::numeric AS range_low,
+       NULL::numeric AS range_high,
+       NULL::integer AS provider_id,
+       NULL::integer AS visit_occurrence_id,
+       NULL::integer AS visit_detail_id,
+       NULL::text AS unit_source_value,
+       NULL::integer AS unit_source_concept_id,
+       s.basophils::text AS value_source_value,
+       NULL::bigint AS measurement_event_id,
+       NULL::integer AS meas_event_field_concept_id,
+       8554 AS unit_concept_id -- %
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+WHERE s.basophils IS NOT NULL
+
+UNION ALL
+-- monocytes
+SELECT nextval('"tb_cdm".measurement_id_seq'), p.person_id,
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD') AS measurement_date,
+       NULL::timestamp AS measurement_datetime,
+       NULL::time AS measurement_time,
+       32818 AS measurement_type_concept_id,
+       37393321 AS measurement_concept_id, -- monocytes
+       NULL::integer AS measurement_source_concept_id,
+       'monocytes' AS measurement_source_value,
+       NULL::integer AS operator_concept_id,
+       s.monocytes::numeric AS value_as_number,
+       NULL::integer AS value_as_concept_id,
+       NULL::numeric AS range_low,
+       NULL::numeric AS range_high,
+       NULL::integer AS provider_id,
+       NULL::integer AS visit_occurrence_id,
+       NULL::integer AS visit_detail_id,
+       NULL::text AS unit_source_value,
+       NULL::integer AS unit_source_concept_id,
+       s.monocytes::text AS value_source_value,
+       NULL::bigint AS measurement_event_id,
+       NULL::integer AS meas_event_field_concept_id,
+       8554 AS unit_concept_id -- %
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+WHERE s.monocytes IS NOT NULL
+
+UNION ALL
+-- crp (c-reactive proteins)
+SELECT nextval('"tb_cdm".measurement_id_seq'), p.person_id,
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD') AS measurement_date,
+       NULL::timestamp AS measurement_datetime,
+       NULL::time AS measurement_time,
+       32818 AS measurement_type_concept_id,
+       4208414 AS measurement_concept_id, -- crp
+       NULL::integer AS measurement_source_concept_id,
+       'crp' AS measurement_source_value,
+       NULL::integer AS operator_concept_id,
+       s.crp::numeric AS value_as_number,
+       NULL::integer AS value_as_concept_id,
+       NULL::numeric AS range_low,
+       NULL::numeric AS range_high,
+       NULL::integer AS provider_id,
+       NULL::integer AS visit_occurrence_id,
+       NULL::integer AS visit_detail_id,
+       NULL::text AS unit_source_value,
+       NULL::integer AS unit_source_concept_id,
+       s.crp::text AS value_source_value,
+       NULL::bigint AS measurement_event_id,
+       NULL::integer AS meas_event_field_concept_id,
+       8751 AS unit_concept_id -- mg/L
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+WHERE s.crp IS NOT NULL
+
+UNION ALL
+-- pads (platelet)
+SELECT nextval('"tb_cdm".measurement_id_seq'), p.person_id,
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD') AS measurement_date,
+       NULL::timestamp AS measurement_datetime,
+       NULL::time AS measurement_time,
+       32818 AS measurement_type_concept_id,
+       36310193 AS measurement_concept_id, -- pads
+       NULL::integer AS measurement_source_concept_id,
+       'pads' AS measurement_source_value,
+       NULL::integer AS operator_concept_id,
+       s.pads::numeric AS value_as_number,
+       NULL::integer AS value_as_concept_id,
+       NULL::numeric AS range_low,
+       NULL::numeric AS range_high,
+       NULL::integer AS provider_id,
+       NULL::integer AS visit_occurrence_id,
+       NULL::integer AS visit_detail_id,
+       NULL::text AS unit_source_value,
+       NULL::integer AS unit_source_concept_id,
+       s.pads::text AS value_source_value,
+       NULL::bigint AS measurement_event_id,
+       NULL::integer AS meas_event_field_concept_id,
+       9665 AS unit_concept_id -- uL
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+WHERE s.pads IS NOT NULL
+
+
+UNION ALL
+-- vgm (mean corpuscular volume)
+SELECT nextval('"tb_cdm".measurement_id_seq'), p.person_id,
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD') AS measurement_date,
+       NULL::timestamp AS measurement_datetime,
+       NULL::time AS measurement_time,
+       32818 AS measurement_type_concept_id,
+       7393851 AS measurement_concept_id, -- vgm
+       NULL::integer AS measurement_source_concept_id,
+       'vgm' AS measurement_source_value,
+       NULL::integer AS operator_concept_id,
+       s.vgm::numeric AS value_as_number,
+       NULL::integer AS value_as_concept_id,
+       NULL::numeric AS range_low,
+       NULL::numeric AS range_high,
+       NULL::integer AS provider_id,
+       NULL::integer AS visit_occurrence_id,
+       NULL::integer AS visit_detail_id,
+       NULL::text AS unit_source_value,
+       NULL::integer AS unit_source_concept_id,
+       s.vgm::text AS value_source_value,
+       NULL::bigint AS measurement_event_id,
+       NULL::integer AS meas_event_field_concept_id,
+       8583 AS unit_concept_id -- fL
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+WHERE s.vgm IS NOT NULL
+
+
+UNION ALL
+-- tcmh (mean corpuscular hemoglobin concentration)
+SELECT nextval('"tb_cdm".measurement_id_seq'), p.person_id,
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD') AS measurement_date,
+       NULL::timestamp AS measurement_datetime,
+       NULL::time AS measurement_time,
+       32818 AS measurement_type_concept_id,
+       4290193 AS measurement_concept_id, -- tcmh
+       NULL::integer AS measurement_source_concept_id,
+       'tcmh' AS measurement_source_value,
+       NULL::integer AS operator_concept_id,
+       s.tcmh::numeric AS value_as_number,
+       NULL::integer AS value_as_concept_id,
+       NULL::numeric AS range_low,
+       NULL::numeric AS range_high,
+       NULL::integer AS provider_id,
+       NULL::integer AS visit_occurrence_id,
+       NULL::integer AS visit_detail_id,
+       NULL::text AS unit_source_value,
+       NULL::integer AS unit_source_concept_id,
+       s.tcmh::text AS value_source_value,
+       NULL::bigint AS measurement_event_id,
+       NULL::integer AS meas_event_field_concept_id,
+       8713 AS unit_concept_id -- g/dL
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+WHERE s.tcmh IS NOT NULL
+
+
+UNION ALL
+-- vs (Erythrocyte Sedimentation Rate)
+SELECT nextval('"tb_cdm".measurement_id_seq'), p.person_id,
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD') AS measurement_date,
+       NULL::timestamp AS measurement_datetime,
+       NULL::time AS measurement_time,
+       32818 AS measurement_type_concept_id,
+       37393853 AS measurement_concept_id, -- vs
+       NULL::integer AS measurement_source_concept_id,
+       'vs' AS measurement_source_value,
+       NULL::integer AS operator_concept_id,
+       s.vs::numeric AS value_as_number,
+       NULL::integer AS value_as_concept_id,
+       NULL::numeric AS range_low,
+       NULL::numeric AS range_high,
+       NULL::integer AS provider_id,
+       NULL::integer AS visit_occurrence_id,
+       NULL::integer AS visit_detail_id,
+       NULL::text AS unit_source_value,
+       NULL::integer AS unit_source_concept_id,
+       s.vs::text AS value_source_value,
+       NULL::bigint AS measurement_event_id,
+       NULL::integer AS meas_event_field_concept_id,
+       8752 AS unit_concept_id -- mm/hour
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+WHERE s.vs IS NOT NULL
+
+UNION ALL
+-- urea
+SELECT nextval('"tb_cdm".measurement_id_seq'), p.person_id,
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD') AS measurement_date,
+       NULL::timestamp AS measurement_datetime,
+       NULL::time AS measurement_time,
+       32818 AS measurement_type_concept_id,
+       4020121 AS measurement_concept_id, -- urea
+       NULL::integer AS measurement_source_concept_id,
+       'urea' AS measurement_source_value,
+       NULL::integer AS operator_concept_id,
+       s.urea::numeric AS value_as_number,
+       NULL::integer AS value_as_concept_id,
+       NULL::numeric AS range_low,
+       NULL::numeric AS range_high,
+       NULL::integer AS provider_id,
+       NULL::integer AS visit_occurrence_id,
+       NULL::integer AS visit_detail_id,
+       NULL::text AS unit_source_value,
+       NULL::integer AS unit_source_concept_id,
+       s.urea::text AS value_source_value,
+       NULL::bigint AS measurement_event_id,
+       NULL::integer AS meas_event_field_concept_id,
+       8636 AS unit_concept_id -- g/L
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+WHERE s.urea IS NOT NULL
+
+
+UNION ALL
+-- creatinine 
+SELECT nextval('"tb_cdm".measurement_id_seq'), p.person_id,
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD') AS measurement_date,
+       NULL::timestamp AS measurement_datetime,
+       NULL::time AS measurement_time,
+       32818 AS measurement_type_concept_id,
+       4324383 AS measurement_concept_id, -- creatinine
+       NULL::integer AS measurement_source_concept_id,
+       'creatinine' AS measurement_source_value,
+       NULL::integer AS operator_concept_id,
+       s.creatinine::numeric AS value_as_number,
+       NULL::integer AS value_as_concept_id,
+       NULL::numeric AS range_low,
+       NULL::numeric AS range_high,
+       NULL::integer AS provider_id,
+       NULL::integer AS visit_occurrence_id,
+       NULL::integer AS visit_detail_id,
+       NULL::text AS unit_source_value,
+       NULL::integer AS unit_source_concept_id,
+       s.creatinine::text AS value_source_value,
+       NULL::bigint AS measurement_event_id,
+       NULL::integer AS meas_event_field_concept_id,
+       8749 AS unit_concept_id -- umol/L
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+WHERE s.creatinine IS NOT NULL
+
+
+UNION ALL
+-- alat_sgpt (alanine transaminase)
+SELECT nextval('"tb_cdm".measurement_id_seq'), p.person_id,
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD') AS measurement_date,
+       NULL::timestamp AS measurement_datetime,
+       NULL::time AS measurement_time,
+       32818 AS measurement_type_concept_id,
+       40462059 AS measurement_concept_id, -- alat_sgpt
+       NULL::integer AS measurement_source_concept_id,
+       'alat_sgpt' AS measurement_source_value,
+       NULL::integer AS operator_concept_id,
+       s.alat_sgpt::numeric AS value_as_number,
+       NULL::integer AS value_as_concept_id,
+       NULL::numeric AS range_low,
+       NULL::numeric AS range_high,
+       NULL::integer AS provider_id,
+       NULL::integer AS visit_occurrence_id,
+       NULL::integer AS visit_detail_id,
+       NULL::text AS unit_source_value,
+       NULL::integer AS unit_source_concept_id,
+       s.alat_sgpt::text AS value_source_value,
+       NULL::bigint AS measurement_event_id,
+       NULL::integer AS meas_event_field_concept_id,
+       8645 AS unit_concept_id -- U/L
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+WHERE s.alat_sgpt IS NOT NULL
+
+UNION ALL
+-- asat_sgot (aspartate transaminase) 
+SELECT nextval('"tb_cdm".measurement_id_seq'), p.person_id,
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD') AS measurement_date,
+       NULL::timestamp AS measurement_datetime,
+       NULL::time AS measurement_time,
+       32818 AS measurement_type_concept_id,
+       4197974 AS measurement_concept_id, -- asat_sgot
+       NULL::integer AS measurement_source_concept_id,
+       'asat_sgot' AS measurement_source_value,
+       NULL::integer AS operator_concept_id,
+       s.asat_sgot::numeric AS value_as_number,
+       NULL::integer AS value_as_concept_id,
+       NULL::numeric AS range_low,
+       NULL::numeric AS range_high,
+       NULL::integer AS provider_id,
+       NULL::integer AS visit_occurrence_id,
+       NULL::integer AS visit_detail_id,
+       NULL::text AS unit_source_value,
+       NULL::integer AS unit_source_concept_id,
+       s.asat_sgot::text AS value_source_value,
+       NULL::bigint AS measurement_event_id,
+       NULL::integer AS meas_event_field_concept_id,
+       8645 AS unit_concept_id -- U/L
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+WHERE s.asat_sgot IS NOT NULL
+
+UNION ALL
+-- CD4_count 
+SELECT nextval('"tb_cdm".measurement_id_seq'), p.person_id,
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD') AS measurement_date,
+       NULL::timestamp AS measurement_datetime,
+       NULL::time AS measurement_time,
+       32818 AS measurement_type_concept_id,
+       143448009 AS measurement_concept_id, -- CD4_count
+       NULL::integer AS measurement_source_concept_id,
+       'CD4_count' AS measurement_source_value,
+       NULL::integer AS operator_concept_id,
+       s.CD4_count::numeric AS value_as_number,
+       NULL::integer AS value_as_concept_id,
+       NULL::numeric AS range_low,
+       NULL::numeric AS range_high,
+       NULL::integer AS provider_id,
+       NULL::integer AS visit_occurrence_id,
+       NULL::integer AS visit_detail_id,
+       NULL::text AS unit_source_value,
+       NULL::integer AS unit_source_concept_id,
+       s.CD4_count::text AS value_source_value,
+       NULL::bigint AS measurement_event_id,
+       NULL::integer AS meas_event_field_concept_id,
+       8784 AS unit_concept_id -- cells/uL
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+WHERE s.CD4_count IS NOT NULL
+
+
+UNION ALL
+-- pleural_lymphocytes 
+SELECT nextval('"tb_cdm".measurement_id_seq'), p.person_id,
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD') AS measurement_date,
+       NULL::timestamp AS measurement_datetime,
+       NULL::time AS measurement_time,
+       32818 AS measurement_type_concept_id,
+       40777290 AS measurement_concept_id, -- pleural_lymphocytes
+       NULL::integer AS measurement_source_concept_id,
+       'pleural_lymphocytes' AS measurement_source_value,
+       NULL::integer AS operator_concept_id,
+       s.pleural_lymphocytes::numeric AS value_as_number,
+       NULL::integer AS value_as_concept_id,
+       NULL::numeric AS range_low,
+       NULL::numeric AS range_high,
+       NULL::integer AS provider_id,
+       NULL::integer AS visit_occurrence_id,
+       NULL::integer AS visit_detail_id,
+       NULL::text AS unit_source_value,
+       NULL::integer AS unit_source_concept_id,
+       s.pleural_lymphocytes::text AS value_source_value,
+       NULL::bigint AS measurement_event_id,
+       NULL::integer AS meas_event_field_concept_id,
+       8686 AS unit_concept_id -- mm^3
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+WHERE s.pleural_lymphocytes IS NOT NULL
+
+
+UNION ALL
+-- pleural_lymphocytes 
+SELECT nextval('"tb_cdm".measurement_id_seq'), p.person_id,
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD') AS measurement_date,
+       NULL::timestamp AS measurement_datetime,
+       NULL::time AS measurement_time,
+       32818 AS measurement_type_concept_id,
+       0301810 AS measurement_concept_id, -- pleural_lymphocytes
+       NULL::integer AS measurement_source_concept_id,
+       'pleural_lymphocytes' AS measurement_source_value,
+       NULL::integer AS operator_concept_id,
+       s."pleural_lymphocytes"::numeric AS value_as_number,
+       NULL::integer AS value_as_concept_id,
+       NULL::numeric AS range_low,
+       NULL::numeric AS range_high,
+       NULL::integer AS provider_id,
+       NULL::integer AS visit_occurrence_id,
+       NULL::integer AS visit_detail_id,
+       NULL::text AS unit_source_value,
+       NULL::integer AS unit_source_concept_id,
+       s."pleural_lymphocytes"::text AS value_source_value,
+       NULL::bigint AS measurement_event_id,
+       NULL::integer AS meas_event_field_concept_id,
+       8554 AS unit_concept_id -- %
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+WHERE s."pleural_lymphocytes" IS NOT NULL
+
+UNION ALL
+-- ascites_proteins 
+SELECT nextval('"tb_cdm".measurement_id_seq'), p.person_id,
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD') AS measurement_date,
+       NULL::timestamp AS measurement_datetime,
+       NULL::time AS measurement_time,
+       32818 AS measurement_type_concept_id,
+       36308435 AS measurement_concept_id, -- ascites_proteins
+       NULL::integer AS measurement_source_concept_id,
+       'ascites_proteins' AS measurement_source_value,
+       NULL::integer AS operator_concept_id,
+       s.ascites_proteins::numeric AS value_as_number,
+       NULL::integer AS value_as_concept_id,
+       NULL::numeric AS range_low,
+       NULL::numeric AS range_high,
+       NULL::integer AS provider_id,
+       NULL::integer AS visit_occurrence_id,
+       NULL::integer AS visit_detail_id,
+       NULL::text AS unit_source_value,
+       NULL::integer AS unit_source_concept_id,
+       s.ascites_proteins::text AS value_source_value,
+       NULL::bigint AS measurement_event_id,
+       NULL::integer AS meas_event_field_concept_id,
+       8636 AS unit_concept_id -- g/L
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+WHERE s.ascites_proteins IS NOT NULL
+
+
+UNION ALL
+-- ascites_leukocytes 
+SELECT nextval('"tb_cdm".measurement_id_seq'), p.person_id,
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD') AS measurement_date,
+       NULL::timestamp AS measurement_datetime,
+       NULL::time AS measurement_time,
+       32818 AS measurement_type_concept_id,
+       36308435 AS measurement_concept_id, -- ascites_leukocytes
+       NULL::integer AS measurement_source_concept_id,
+       'ascites_leukocytes' AS measurement_source_value,
+       NULL::integer AS operator_concept_id,
+       s.ascites_leukocytes::numeric AS value_as_number,
+       NULL::integer AS value_as_concept_id,
+       NULL::numeric AS range_low,
+       NULL::numeric AS range_high,
+       NULL::integer AS provider_id,
+       NULL::integer AS visit_occurrence_id,
+       NULL::integer AS visit_detail_id,
+       NULL::text AS unit_source_value,
+       NULL::integer AS unit_source_concept_id,
+       s.ascites_leukocytes::text AS value_source_value,
+       NULL::bigint AS measurement_event_id,
+       NULL::integer AS meas_event_field_concept_id,
+       8686 AS unit_concept_id -- mm^3
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+WHERE s.ascites_leukocytes IS NOT NULL
+
+
+UNION ALL
+-- lymphocytes_ascites 
+SELECT nextval('"tb_cdm".measurement_id_seq'), p.person_id,
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD') AS measurement_date,
+       NULL::timestamp AS measurement_datetime,
+       NULL::time AS measurement_time,
+       32818 AS measurement_type_concept_id,
+       36308435 AS measurement_concept_id, -- lymphocytes_ascites
+       NULL::integer AS measurement_source_concept_id,
+       'lymphocytes_ascites' AS measurement_source_value,
+       NULL::integer AS operator_concept_id,
+       s."lymphocytes_ascites"::numeric AS value_as_number,
+       NULL::integer AS value_as_concept_id,
+       NULL::numeric AS range_low,
+       NULL::numeric AS range_high,
+       NULL::integer AS provider_id,
+       NULL::integer AS visit_occurrence_id,
+       NULL::integer AS visit_detail_id,
+       NULL::text AS unit_source_value,
+       NULL::integer AS unit_source_concept_id,
+       s."lymphocytes_ascites"::text AS value_source_value,
+       NULL::bigint AS measurement_event_id,
+       NULL::integer AS meas_event_field_concept_id,
+       8848 AS unit_concept_id -- 10^9/L
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+WHERE s."lymphocytes_ascites" IS NOT NULL
+
+
+
+UNION ALL
+-- csf_leukocytes 
+SELECT nextval('"tb_cdm".measurement_id_seq'), p.person_id,
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD') AS measurement_date,
+       NULL::timestamp AS measurement_datetime,
+       NULL::time AS measurement_time,
+       32818 AS measurement_type_concept_id,
+       45878743 AS measurement_concept_id, -- csf_leukocytes
+       NULL::integer AS measurement_source_concept_id,
+       'csf_leukocytes' AS measurement_source_value,
+       NULL::integer AS operator_concept_id,
+       s.csf_leukocytes::numeric AS value_as_number,
+       NULL::integer AS value_as_concept_id,
+       NULL::numeric AS range_low,
+       NULL::numeric AS range_high,
+       NULL::integer AS provider_id,
+       NULL::integer AS visit_occurrence_id,
+       NULL::integer AS visit_detail_id,
+       NULL::text AS unit_source_value,
+       NULL::integer AS unit_source_concept_id,
+       s.csf_leukocytes::text AS value_source_value,
+       NULL::bigint AS measurement_event_id,
+       NULL::integer AS meas_event_field_concept_id,
+       8686 AS unit_concept_id -- mm^3
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+WHERE s.csf_leukocytes IS NOT NULL
+
+
+UNION ALL
+-- csf_lymphocytes 
+SELECT nextval('"tb_cdm".measurement_id_seq'), p.person_id,
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD') AS measurement_date,
+       NULL::timestamp AS measurement_datetime,
+       NULL::time AS measurement_time,
+       32818 AS measurement_type_concept_id,
+       36309122 AS measurement_concept_id, -- csf_lymphocytes
+       NULL::integer AS measurement_source_concept_id,
+       'csf_lymphocytes' AS measurement_source_value,
+       NULL::integer AS operator_concept_id,
+       s."csf_lymphocytes"::numeric AS value_as_number,
+       NULL::integer AS value_as_concept_id,
+       NULL::numeric AS range_low,
+       NULL::numeric AS range_high,
+       NULL::integer AS provider_id,
+       NULL::integer AS visit_occurrence_id,
+       NULL::integer AS visit_detail_id,
+       NULL::text AS unit_source_value,
+       NULL::integer AS unit_source_concept_id,
+       s."csf_lymphocytes"::text AS value_source_value,
+       NULL::bigint AS measurement_event_id,
+       NULL::integer AS meas_event_field_concept_id,
+       8554 AS unit_concept_id -- %
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+WHERE s."csf_lymphocytes" IS NOT NULL
+
+
+UNION ALL
+-- search_for_afb (Acid-Fast Bacilli smear result)
+SELECT nextval('"tb_cdm".measurement_id_seq'), p.person_id,
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD') AS measurement_date,
+       NULL::timestamp AS measurement_datetime,
+       NULL::time AS measurement_time,
+       32818 AS measurement_type_concept_id,
+       4310354 AS measurement_concept_id, -- Acid-fast bacilli smear
+       NULL::integer AS measurement_source_concept_id,
+       'search_for_afb' AS measurement_source_value,
+       NULL::integer AS operator_concept_id,
+       NULL::numeric AS value_as_number,
+       CASE 
+           WHEN s.search_for_afb = 'Positive' THEN 45884084  -- Positive
+           WHEN s.search_for_afb = 'Negative' THEN 45878583  -- Negative
+           WHEN s.search_for_afb = 'Not done' THEN 45878559  -- Test not done
+           ELSE NULL
+       END AS value_as_concept_id,
+       NULL::numeric AS range_low,
+       NULL::numeric AS range_high,
+       NULL::integer AS provider_id,
+       NULL::integer AS visit_occurrence_id,
+       NULL::integer AS visit_detail_id,
+       NULL::text AS unit_source_value,
+       NULL::integer AS unit_source_concept_id,
+       s.search_for_afb::text AS value_source_value,
+       NULL::bigint AS measurement_event_id,
+       NULL::integer AS meas_event_field_concept_id,
+       NULL::integer AS unit_concept_id
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+WHERE s.search_for_afb IS NOT NULL;

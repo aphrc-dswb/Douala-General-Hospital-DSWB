@@ -1,0 +1,236 @@
+-- CONDITION_OCCURENCE
+-- Step 1: Ensure sequence exists for condition_occurrence_id
+
+CREATE SEQUENCE IF NOT EXISTS "tb_cdm".condition_occurrence_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    OWNED BY "tb_cdm".condition_occurrence.condition_occurrence_id;
+
+
+-- Step 2: Insert into condition_occurrence
+INSERT INTO "tb_cdm".condition_occurrence ( 
+    condition_occurrence_id,
+    person_id,
+    condition_concept_id,
+    condition_start_date,
+    condition_start_datetime,
+    condition_end_date,
+    condition_end_datetime,
+    condition_type_concept_id,
+    condition_status_concept_id,
+    stop_reason,
+    provider_id,
+    visit_occurrence_id,
+    visit_detail_id,
+    condition_source_value,
+    condition_source_concept_id,
+    condition_status_source_value
+)
+-- Nocturnal excessive sweating
+SELECT
+    nextval('"tb_cdm".condition_occurrence_id_seq'),
+    p.person_id,
+    4203638, ---Night sweats
+    TO_DATE(s.year_of_treatment_start::text || '-01-01', 'YYYY-MM-DD'),
+    NULL::timestamp, NULL::date, NULL::timestamp,
+    32818, NULL::integer, NULL,
+    pr.provider_id,
+    v.visit_occurrence_id,
+    NULL::integer,
+    s.nocturnal_excessive_sweating,
+    NULL::integer, 
+	NULL
+FROM "tb_dgh_2009_2022" s
+JOIN "tb_cdm".person p ON p.person_source_value = s.uniqueid
+JOIN "tb_cdm".visit_occurrence v ON v.person_id = p.person_id
+CROSS JOIN "tb_cdm".provider pr
+WHERE s.nocturnal_excessive_sweating IS NOT NULL
+
+UNION ALL
+-- Anorexia
+SELECT
+    nextval('"tb_cdm".condition_occurrence_id_seq'),
+    p.person_id,
+    442165, ---Anorexia
+    TO_DATE(s.year_of_treatment_start::text || '-01-01', 'YYYY-MM-DD'),
+    NULL::timestamp, NULL::date, NULL::timestamp,
+    32818, NULL::integer, NULL,
+    pr.provider_id,
+    v.visit_occurrence_id,
+    NULL::integer,
+    s.anorexia,
+    NULL::integer,
+	NULL
+FROM "tb_dgh_2009_2022" s
+JOIN "tb_cdm".person p ON p.person_source_value = s.uniqueid
+JOIN "tb_cdm".visit_occurrence v ON v.person_id = p.person_id
+CROSS JOIN "tb_cdm".provider pr
+WHERE s.anorexia IS NOT NULL
+
+UNION ALL
+-- Weight loss
+SELECT
+    nextval('"tb_cdm".condition_occurrence_id_seq'),
+    p.person_id,
+    40491502, --- Weight loss
+    TO_DATE(s.year_of_treatment_start::text || '-01-01', 'YYYY-MM-DD'),
+    NULL::timestamp, NULL::date, NULL::timestamp,
+    32818, NULL::integer, NULL,
+    pr.provider_id,
+    v.visit_occurrence_id,
+    NULL::integer,
+    s.weight_loss,
+    NULL::integer,
+	NULL
+FROM "tb_dgh_2009_2022" s
+JOIN "tb_cdm".person p ON p.person_source_value = s.uniqueid
+JOIN "tb_cdm".visit_occurrence v ON v.person_id = p.person_id
+CROSS JOIN "tb_cdm".provider pr
+WHERE s.weight_loss IS NOT NULL
+
+UNION ALL
+-- Asthenia
+SELECT
+    nextval('"tb_cdm".condition_occurrence_id_seq'),
+    p.person_id,
+    437113, -- Asthenia
+    TO_DATE(s.year_of_treatment_start::text || '-01-01', 'YYYY-MM-DD'),
+    NULL::timestamp, NULL::date, NULL::timestamp,
+    32818, NULL::integer, NULL,
+    pr.provider_id,
+    v.visit_occurrence_id,
+    NULL::integer,
+    s.asthenia,
+    NULL::integer,
+	NULL
+FROM "tb_dgh_2009_2022" s
+JOIN "tb_cdm".person p ON p.person_source_value = s.uniqueid
+JOIN "tb_cdm".visit_occurrence v ON v.person_id = p.person_id
+CROSS JOIN "tb_cdm".provider pr
+WHERE s.asthenia IS NOT NULL
+
+UNION ALL
+-- Fever
+SELECT
+    nextval('"tb_cdm".condition_occurrence_id_seq'),
+    p.person_id,
+    437663, --- Fever
+    TO_DATE(s.year_of_treatment_start::text || '-01-01', 'YYYY-MM-DD'),
+    NULL::timestamp, NULL::date, NULL::timestamp,
+    32818, NULL::integer, NULL,
+    pr.provider_id,
+    v.visit_occurrence_id,
+    NULL::integer,
+    s.fever,
+    NULL::integer,
+	NULL
+FROM "tb_dgh_2009_2022" s
+JOIN "tb_cdm".person p ON p.person_source_value = s.uniqueid
+JOIN "tb_cdm".visit_occurrence v ON v.person_id = p.person_id
+CROSS JOIN "tb_cdm".provider pr
+WHERE s.fever IS NOT NULL
+
+UNION ALL
+-- Cough
+SELECT
+    nextval('"tb_cdm".condition_occurrence_id_seq'),
+    p.person_id,
+    254761, --- Cough
+    TO_DATE(s.year_of_treatment_start::text || '-01-01', 'YYYY-MM-DD'),
+    NULL::timestamp, NULL::date, NULL::timestamp,
+    32818, NULL::integer, NULL,
+    pr.provider_id,
+    v.visit_occurrence_id,
+    NULL::integer,
+    s.cough,
+    NULL::integer,
+	NULL
+FROM "tb_dgh_2009_2022" s
+JOIN "tb_cdm".person p ON p.person_source_value = s.uniqueid
+JOIN "tb_cdm".visit_occurrence v ON v.person_id = p.person_id
+CROSS JOIN "tb_cdm".provider pr
+WHERE s.cough IS NOT NULL
+
+UNION ALL
+-- Expectoration
+SELECT
+    nextval('"tb_cdm".condition_occurrence_id_seq'),
+    p.person_id,
+    4181777,  --- Expectoration
+    TO_DATE(s.year_of_treatment_start::text || '-01-01', 'YYYY-MM-DD'),
+    NULL::timestamp, NULL::date, NULL::timestamp,
+    32818, NULL::integer, NULL,
+    pr.provider_id,
+    v.visit_occurrence_id,
+    NULL::integer,
+    s.expectoration,
+    NULL::integer,
+	NULL
+FROM "tb_dgh_2009_2022" s
+JOIN "tb_cdm".person p ON p.person_source_value = s.uniqueid
+JOIN "tb_cdm".visit_occurrence v ON v.person_id = p.person_id
+CROSS JOIN "tb_cdm".provider pr
+WHERE s.expectoration IS NOT NULL
+
+UNION ALL
+-- Hemoptysis
+SELECT
+    nextval('"tb_cdm".condition_occurrence_id_seq'),
+    p.person_id,
+    261687, --- Hemoptysis
+    TO_DATE(s.year_of_treatment_start::text || '-01-01', 'YYYY-MM-DD'),
+    NULL::timestamp, NULL::date, NULL::timestamp,
+    32818, NULL::integer, NULL,
+    pr.provider_id,
+    v.visit_occurrence_id,
+    NULL::integer,
+    s.hemoptysis,
+    NULL::integer,
+	NULL
+FROM "tb_dgh_2009_2022" s
+JOIN "tb_cdm".person p ON p.person_source_value = s.uniqueid
+JOIN "tb_cdm".visit_occurrence v ON v.person_id = p.person_id
+CROSS JOIN "tb_cdm".provider pr
+WHERE s.hemoptysis IS NOT NULL
+
+UNION ALL
+-- Dyspnea
+SELECT
+    nextval('"tb_cdm".condition_occurrence_id_seq'),
+    p.person_id,
+    312437, --- Dyspnea
+    TO_DATE(s.year_of_treatment_start::text || '-01-01', 'YYYY-MM-DD'),
+    NULL::timestamp, NULL::date, NULL::timestamp,
+    32818, NULL::integer, NULL,
+    pr.provider_id,
+    v.visit_occurrence_id,
+    NULL::integer,
+    s.dyspnea,
+    NULL::integer,
+	NULL
+FROM "tb_dgh_2009_2022" s
+JOIN "tb_cdm".person p ON p.person_source_value = s.uniqueid
+JOIN "tb_cdm".visit_occurrence v ON v.person_id = p.person_id
+CROSS JOIN "tb_cdm".provider pr
+WHERE s.dyspnea IS NOT NULL
+
+UNION ALL
+-- Chest pain
+SELECT
+    nextval('"tb_cdm".condition_occurrence_id_seq'),
+    p.person_id,
+    77670,  --- Chest pain
+    TO_DATE(s.year_of_treatment_start::text || '-01-01', 'YYYY-MM-DD'),
+    NULL::timestamp, NULL::date, NULL::timestamp,
+    32818, NULL::integer, NULL,
+    pr.provider_id,
+    v.visit_occurrence_id,
+    NULL::integer,
+    s.chest_pain,
+    NULL::integer,
+	NULL
+FROM "tb_dgh_2009_2022" s
+JOIN "tb_cdm".person p ON p.person_source_value = s.uniqueid
+JOIN "tb_cdm".visit_occurrence v ON v.person_id = p.person_id
+CROSS JOIN "tb_cdm".provider pr
+WHERE s.chest_pain IS NOT NULL;

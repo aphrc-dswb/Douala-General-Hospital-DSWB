@@ -1,0 +1,895 @@
+-- OBSERVATION
+-- Step 1: Ensure sequence exists for observation_id
+
+CREATE SEQUENCE IF NOT EXISTS "tb_cdm".observation_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    OWNED BY "tb_cdm".observation.observation_id;
+
+
+-- Step 2: Insert into observation table
+INSERT INTO "tb_cdm".observation (
+    observation_id,
+    person_id,
+    observation_concept_id,
+    observation_date,
+    observation_datetime,
+    observation_type_concept_id,
+    value_as_number,
+    value_as_string,
+    value_as_concept_id,
+    qualifier_concept_id,
+    unit_concept_id,
+    provider_id,
+    visit_occurrence_id,
+    visit_detail_id,
+    observation_source_value,
+    observation_source_concept_id,
+    unit_source_value,
+    qualifier_source_value,
+    value_source_value,
+    observation_event_id,
+    obs_event_field_concept_id
+)
+-- Appearance of ascites fluid
+SELECT nextval('"tb_cdm".observation_id_seq'),
+       p.person_id,
+       0 AS observation_concept_id, --appearance of ascites fluid
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD'),
+       NULL::timestamp,
+       32818,
+       NULL::numeric,
+       s.appearance_of_ascites_fluid::text,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       v.visit_occurrence_id,
+       NULL::integer,
+       'appearance_of_ascites_fluid',
+       NULL::integer,
+       NULL::text,
+       NULL::text,
+       s.appearance_of_ascites_fluid::text,
+       NULL::bigint,
+       NULL::integer
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+JOIN tb_cdm.visit_occurrence v ON v.person_id = p.person_id
+WHERE s.appearance_of_ascites_fluid IS NOT NULL
+
+UNION ALL
+-- sputum_at_the_end_of_the_3rd_month
+SELECT nextval('"tb_cdm".observation_id_seq'),
+       p.person_id,
+       0 AS observation_concept_id, -- sputum_at_the_end_of_the_3rd_month
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD'),
+       NULL::timestamp,
+       32818,
+       NULL::numeric,
+       s.sputum_at_the_end_of_the_3rd_month::text,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       v.visit_occurrence_id,
+       NULL::integer,
+       'sputum_at_the_end_of_the_3rd_month',
+       NULL::integer,
+       NULL::text,
+       NULL::text,
+       s.sputum_at_the_end_of_the_3rd_month::text,
+       NULL::bigint,
+       NULL::integer
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+JOIN tb_cdm.visit_occurrence v ON v.person_id = p.person_id
+WHERE s.sputum_at_the_end_of_the_3rd_month IS NOT NULL
+
+UNION ALL
+-- arv_treatment
+SELECT nextval('"tb_cdm".observation_id_seq'),
+       p.person_id,
+       0 AS observation_concept_id, -- arv_treatment
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD'),
+       NULL::timestamp,
+       32818,
+       NULL::numeric,
+       s.arv_treatment::text,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       v.visit_occurrence_id,
+       NULL::integer,
+       'arv_treatment',
+       NULL::integer,
+       NULL::text,
+       NULL::text,
+       s.arv_treatment::text,
+       NULL::bigint,
+       NULL::integer
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+JOIN tb_cdm.visit_occurrence v ON v.person_id = p.person_id
+WHERE s.arv_treatment IS NOT NULL
+
+
+UNION ALL
+-- spitting_at_the_end_of_the_2nd_month
+SELECT nextval('"tb_cdm".observation_id_seq'),
+       p.person_id,
+       0 AS observation_concept_id, --spitting_at_the_end_of_the_2nd_month
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD'),
+       NULL::timestamp,
+       32818,
+       NULL::numeric,
+       s.spitting_at_the_end_of_the_2nd_month::text,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       v.visit_occurrence_id,
+       NULL::integer,
+       'spitting_at_the_end_of_the_2nd_month',
+       NULL::integer,
+       NULL::text,
+       NULL::text,
+       s.spitting_at_the_end_of_the_2nd_month::text,
+       NULL::bigint,
+       NULL::integer
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+JOIN tb_cdm.visit_occurrence v ON v.person_id = p.person_id
+WHERE s.spitting_at_the_end_of_the_2nd_month IS NOT NULL
+
+UNION ALL
+-- appearance of cerebrospinal fluid
+SELECT nextval('"tb_cdm".observation_id_seq'),
+       p.person_id,
+       0 AS observation_concept_id, -- appearance of cerebrospinal fluid
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD'),
+       NULL::timestamp,
+       32818,
+       NULL::numeric,
+       s.appearance_of_cerebrospinal_fluid::text,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       v.visit_occurrence_id,
+       NULL::integer,
+       'sputum_at_the_end_of_the_3rd_month',
+       NULL::integer,
+       NULL::text,
+       NULL::text,
+       s.sputum_at_the_end_of_the_3rd_month::text,
+       NULL::bigint,
+       NULL::integer
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+JOIN tb_cdm.visit_occurrence v ON v.person_id = p.person_id
+WHERE s.sputum_at_the_end_of_the_3rd_month IS NOT NULL
+
+UNION ALL
+-- tobacco_consumption
+SELECT nextval('"tb_cdm".observation_id_seq'),
+       p.person_id,
+       0 AS observation_concept_id, -- tobacco_consumption
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD'),
+       NULL::timestamp,
+       32818,
+       NULL::numeric,
+       s.tobacco_consumption::text,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       v.visit_occurrence_id,
+       NULL::integer,
+       'tobacco_consumption',
+       NULL::integer,
+       NULL::text,
+       NULL::text,
+       s.tobacco_consumption::text,
+       NULL::bigint,
+       NULL::integer
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+JOIN tb_cdm.visit_occurrence v ON v.person_id = p.person_id
+WHERE s.tobacco_consumption IS NOT NULL
+
+UNION ALL
+-- alcohol_consumption
+SELECT nextval('"tb_cdm".observation_id_seq'),
+       p.person_id,
+       0 AS observation_concept_id, -- alcohol_consumption
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD'),
+       NULL::timestamp,
+       32818,
+       NULL::numeric,
+       s.alcohol_consumption::text,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       v.visit_occurrence_id,
+       NULL::integer,
+       'alcohol_consumption',
+       NULL::integer,
+       NULL::text,
+       NULL::text,
+       s.alcohol_consumption::text,
+       NULL::bigint,
+       NULL::integer
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+JOIN tb_cdm.visit_occurrence v ON v.person_id = p.person_id
+WHERE s.alcohol_consumption IS NOT NULL
+
+
+UNION ALL
+-- consumption_of_other_drugs
+SELECT nextval('"tb_cdm".observation_id_seq'),
+       p.person_id,
+       0 AS observation_concept_id, -- consumption_of_other_drugs
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD'),
+       NULL::timestamp,
+       32818,
+       NULL::numeric,
+       s.consumption_of_other_drugs::text,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       v.visit_occurrence_id,
+       NULL::integer,
+       'consumption_of_other_drugs',
+       NULL::integer,
+       NULL::text,
+       NULL::text,
+       s.consumption_of_other_drugs::text,
+       NULL::bigint,
+       NULL::integer
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+JOIN tb_cdm.visit_occurrence v ON v.person_id = p.person_id
+WHERE s.consumption_of_other_drugs IS NOT NULL
+
+
+UNION ALL
+-- pcr
+SELECT nextval('"tb_cdm".observation_id_seq'),
+       p.person_id,
+       0 AS observation_concept_id, -- pcr
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD'),
+       NULL::timestamp,
+       32818,
+       NULL::numeric,
+       s.pcr::text,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       v.visit_occurrence_id,
+       NULL::integer,
+       'pcr',
+       NULL::integer,
+       NULL::text,
+       NULL::text,
+       s.pcr::text,
+       NULL::bigint,
+       NULL::integer
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+JOIN tb_cdm.visit_occurrence v ON v.person_id = p.person_id
+WHERE s.pcr IS NOT NULL
+
+
+
+UNION ALL
+-- location
+SELECT nextval('"tb_cdm".observation_id_seq'),
+       p.person_id,
+       0 AS observation_concept_id, -- location
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD'),
+       NULL::timestamp,
+       32818,
+       NULL::numeric,
+       s.location::text,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       v.visit_occurrence_id,
+       NULL::integer,
+       'location',
+       NULL::integer,
+       NULL::text,
+       NULL::text,
+       s.location::text,
+       NULL::bigint,
+       NULL::integer
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+JOIN tb_cdm.visit_occurrence v ON v.person_id = p.person_id
+WHERE s.location IS NOT NULL
+
+
+
+UNION ALL
+-- tb_v2_localisation
+SELECT nextval('"tb_cdm".observation_id_seq'),
+       p.person_id,
+       0 AS observation_concept_id, -- tb_v2_localisation
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD'),
+       NULL::timestamp,
+       32818,
+       NULL::numeric,
+       s.tb_v2_localisation::text,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       v.visit_occurrence_id,
+       NULL::integer,
+       'tb_v2_localisation',
+       NULL::integer,
+       NULL::text,
+       NULL::text,
+       s.tb_v2_localisation::text,
+       NULL::bigint,
+       NULL::integer
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+JOIN tb_cdm.visit_occurrence v ON v.person_id = p.person_id
+WHERE s.tb_v2_localisation IS NOT NULL
+
+
+
+UNION ALL
+-- clinical_category
+SELECT nextval('"tb_cdm".observation_id_seq'),
+       p.person_id,
+       0 AS observation_concept_id, -- clinical_category
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD'),
+       NULL::timestamp,
+       32818,
+       NULL::numeric,
+       s.clinical_category::text,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       v.visit_occurrence_id,
+       NULL::integer,
+       'clinical_category',
+       NULL::integer,
+       NULL::text,
+       NULL::text,
+       s.clinical_category::text,
+       NULL::bigint,
+       NULL::integer
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+JOIN tb_cdm.visit_occurrence v ON v.person_id = p.person_id
+WHERE s.clinical_category IS NOT NULL
+
+UNION ALL
+-- occupation
+SELECT nextval('"tb_cdm".observation_id_seq'),
+       p.person_id,
+       4033543 AS observation_concept_id, -- occupation
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD'),
+       NULL::timestamp,
+       32818,
+       NULL::numeric,
+       s.occupation::text,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       v.visit_occurrence_id,
+       NULL::integer,
+       'occupation',
+       NULL::integer,
+       NULL::text,
+       NULL::text,
+       s.occupation::text,
+       NULL::bigint,
+       NULL::integer
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+JOIN tb_cdm.visit_occurrence v ON v.person_id = p.person_id
+WHERE s.occupation IS NOT NULL
+
+UNION ALL
+-- marital_status
+SELECT nextval('"tb_cdm".observation_id_seq'),
+       p.person_id,
+       40360833	 AS observation_concept_id, -- marital_status
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD'),
+       NULL::timestamp,
+       32818,
+       NULL::numeric,
+       s.marital_status::text,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       v.visit_occurrence_id,
+       NULL::integer,
+       'marital_status',
+       NULL::integer,
+       NULL::text,
+       NULL::text,
+       s.marital_status::text,
+       NULL::bigint,
+       NULL::integer
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+JOIN tb_cdm.visit_occurrence v ON v.person_id = p.person_id
+WHERE s.marital_status IS NOT NULL
+
+
+UNION ALL
+-- history_of_tuberculosis
+SELECT nextval('"tb_cdm".observation_id_seq'),
+       p.person_id,
+       45947521 AS observation_concept_id, -- history_of_tuberculosis
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD'),
+       NULL::timestamp,
+       32818,
+       NULL::numeric,
+       s.history_of_tuberculosis::text,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       v.visit_occurrence_id,
+       NULL::integer,
+       'history_of_tuberculosis',
+       NULL::integer,
+       NULL::text,
+       NULL::text,
+       s.history_of_tuberculosis::text,
+       NULL::bigint,
+       NULL::integer
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+JOIN tb_cdm.visit_occurrence v ON v.person_id = p.person_id
+WHERE s.history_of_tuberculosis IS NOT NULL
+
+UNION ALL
+-- hiv_status
+SELECT nextval('"tb_cdm".observation_id_seq'),
+       p.person_id,
+       40758406	 AS observation_concept_id, -- hiv_status
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD'),
+       NULL::timestamp,
+       32818,
+       NULL::numeric,
+       s.hiv_status::text,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       v.visit_occurrence_id,
+       NULL::integer,
+       'hiv_status',
+       NULL::integer,
+       NULL::text,
+       NULL::text,
+       s.hiv_status::text,
+       NULL::bigint,
+       NULL::integer
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+JOIN tb_cdm.visit_occurrence v ON v.person_id = p.person_id
+WHERE s.hiv_status IS NOT NULL
+
+UNION ALL
+-- hta (high blood pressure)
+SELECT nextval('"tb_cdm".observation_id_seq'),
+       p.person_id,
+       3958651 AS observation_concept_id, -- hta
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD'),
+       NULL::timestamp,
+       32818,
+       NULL::numeric,
+       s.hta::text,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       v.visit_occurrence_id,
+       NULL::integer,
+       'hta',
+       NULL::integer,
+       NULL::text,
+       NULL::text,
+       s.hta::text,
+       NULL::bigint,
+       NULL::integer
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+JOIN tb_cdm.visit_occurrence v ON v.person_id = p.person_id
+WHERE s.hta IS NOT NULL
+
+
+UNION ALL
+-- diabetes
+SELECT nextval('"tb_cdm".observation_id_seq'),
+       p.person_id,
+       35817874 AS observation_concept_id, -- diabetes
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD'),
+       NULL::timestamp,
+       32818,
+       NULL::numeric,
+       s.diabetes::text,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       v.visit_occurrence_id,
+       NULL::integer,
+       'diabetes',
+       NULL::integer,
+       NULL::text,
+       NULL::text,
+       s.diabetes::text,
+       NULL::bigint,
+       NULL::integer
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+JOIN tb_cdm.visit_occurrence v ON v.person_id = p.person_id
+WHERE s.diabetes IS NOT NULL
+
+
+UNION ALL
+-- chronic_kidney_disease
+SELECT nextval('"tb_cdm".observation_id_seq'),
+       p.person_id,
+       46271022	 AS observation_concept_id, -- chronic_kidney_disease
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD'),
+       NULL::timestamp,
+       32818,
+       NULL::numeric,
+       s.chronic_kidney_disease::text,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       v.visit_occurrence_id,
+       NULL::integer,
+       'chronic_kidney_disease',
+       NULL::integer,
+       NULL::text,
+       NULL::text,
+       s.chronic_kidney_disease::text,
+       NULL::bigint,
+       NULL::integer
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+JOIN tb_cdm.visit_occurrence v ON v.person_id = p.person_id
+WHERE s.chronic_kidney_disease IS NOT NULL
+
+
+UNION ALL
+-- hepatitis_serology
+SELECT nextval('"tb_cdm".observation_id_seq'),
+       p.person_id,
+       40369431 AS observation_concept_id, -- hepatitis_serology
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD'),
+       NULL::timestamp,
+       32818,
+       NULL::numeric,
+       s.hepatitis_serology::text,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       v.visit_occurrence_id,
+       NULL::integer,
+       'hepatitis_serology',
+       NULL::integer,
+       NULL::text,
+       NULL::text,
+       s.hepatitis_serology::text,
+       NULL::bigint,
+       NULL::integer
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+JOIN tb_cdm.visit_occurrence v ON v.person_id = p.person_id
+WHERE s.hepatitis_serology IS NOT NULL
+
+
+UNION ALL
+-- pleural_puncture
+SELECT nextval('"tb_cdm".observation_id_seq'),
+       p.person_id,
+       40261621	 AS observation_concept_id, -- pleural_puncture
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD'),
+       NULL::timestamp,
+       32818,
+       NULL::numeric,
+       s.pleural_puncture::text,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       v.visit_occurrence_id,
+       NULL::integer,
+       'pleural_puncture',
+       NULL::integer,
+       NULL::text,
+       NULL::text,
+       s.pleural_puncture::text,
+       NULL::bigint,
+       NULL::integer
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+JOIN tb_cdm.visit_occurrence v ON v.person_id = p.person_id
+WHERE s.pleural_puncture IS NOT NULL
+
+
+UNION ALL
+-- macroscopic_appearance_of_pleural_fluid
+SELECT nextval('"tb_cdm".observation_id_seq'),
+       p.person_id,
+       4276415 AS observation_concept_id, -- macroscopic_appearance_of_pleural_fluid
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD'),
+       NULL::timestamp,
+       32818,
+       NULL::numeric,
+       s.macroscopic_appearance_of_pleural_fluid::text,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       v.visit_occurrence_id,
+       NULL::integer,
+       'macroscopic_appearance_of_pleural_fluid',
+       NULL::integer,
+       NULL::text,
+       NULL::text,
+       s.macroscopic_appearance_of_pleural_fluid::text,
+       NULL::bigint,
+       NULL::integer
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+JOIN tb_cdm.visit_occurrence v ON v.person_id = p.person_id
+WHERE s.macroscopic_appearance_of_pleural_fluid IS NOT NULL
+
+
+UNION ALL
+-- ascitic_fluid_analysis
+SELECT nextval('"tb_cdm".observation_id_seq'),
+       p.person_id,
+       4256225 AS observation_concept_id, -- ascitic_fluid_analysis
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD'),
+       NULL::timestamp,
+       32818,
+       NULL::numeric,
+       s.ascitic_fluid_analysis::text,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       v.visit_occurrence_id,
+       NULL::integer,
+       'ascitic_fluid_analysis',
+       NULL::integer,
+       NULL::text,
+       NULL::text,
+       s.ascitic_fluid_analysis::text,
+       NULL::bigint,
+       NULL::integer
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+JOIN tb_cdm.visit_occurrence v ON v.person_id = p.person_id
+WHERE s.ascitic_fluid_analysis IS NOT NULL
+
+
+UNION ALL
+-- treatment_result
+SELECT nextval('"tb_cdm".observation_id_seq'),
+       p.person_id,
+       45955611 AS observation_concept_id, -- treatment_result
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD'),
+       NULL::timestamp,
+       32818,
+       NULL::numeric,
+       s.treatment_result::text,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       v.visit_occurrence_id,
+       NULL::integer,
+       'treatment_result',
+       NULL::integer,
+       NULL::text,
+       NULL::text,
+       s.treatment_result::text,
+       NULL::bigint,
+       NULL::integer
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+JOIN tb_cdm.visit_occurrence v ON v.person_id = p.person_id
+WHERE s.treatment_result IS NOT NULL
+
+
+UNION ALL
+-- treatment_outcome_therapeutic_success
+SELECT nextval('"tb_cdm".observation_id_seq'),
+       p.person_id,
+       45955611	 AS observation_concept_id, -- treatment_outcome_therapeutic_success
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD'),
+       NULL::timestamp,
+       32818,
+       NULL::numeric,
+       s.treatment_outcome_therapeutic_success::text,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       v.visit_occurrence_id,
+       NULL::integer,
+       'treatment_outcome_therapeutic_success',
+       NULL::integer,
+       NULL::text,
+       NULL::text,
+       s.treatment_outcome_therapeutic_success::text,
+       NULL::bigint,
+       NULL::integer
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+JOIN tb_cdm.visit_occurrence v ON v.person_id = p.person_id
+WHERE s.treatment_outcome_therapeutic_success IS NOT NULL
+
+
+UNION ALL
+-- clinical_category_2
+SELECT nextval('"tb_cdm".observation_id_seq'),
+       p.person_id,
+       0 AS observation_concept_id, -- clinical_category_2
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD'),
+       NULL::timestamp,
+       32818,
+       NULL::numeric,
+       s.clinical_category_2::text,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       v.visit_occurrence_id,
+       NULL::integer,
+       'clinical_category_2',
+       NULL::integer,
+       NULL::text,
+       NULL::text,
+       s.clinical_category_2::text,
+       NULL::bigint,
+       NULL::integer
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+JOIN tb_cdm.visit_occurrence v ON v.person_id = p.person_id
+WHERE s.clinical_category_2 IS NOT NULL
+
+
+UNION ALL
+-- chronic_kidney_disease_in_2_categories
+SELECT nextval('"tb_cdm".observation_id_seq'),
+       p.person_id,
+       46271022 AS observation_concept_id, -- chronic_kidney_disease_in_2_categories
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD'),
+       NULL::timestamp,
+       32818,
+       NULL::numeric,
+       s.chronic_kidney_disease_in_2_categories::text,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       v.visit_occurrence_id,
+       NULL::integer,
+       'chronic_kidney_disease_in_2_categories',
+       NULL::integer,
+       NULL::text,
+       NULL::text,
+       s.chronic_kidney_disease_in_2_categories::text,
+       NULL::bigint,
+       NULL::integer
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+JOIN tb_cdm.visit_occurrence v ON v.person_id = p.person_id
+WHERE s.chronic_kidney_disease_in_2_categories IS NOT NULL
+
+
+UNION ALL
+-- smoking_in_2_categories
+SELECT nextval('"tb_cdm".observation_id_seq'),
+       p.person_id,
+       45615730 AS observation_concept_id, -- smoking_in_2_categories
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD'),
+       NULL::timestamp,
+       32818,
+       NULL::numeric,
+       s.smoking_in_2_categories::text,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       v.visit_occurrence_id,
+       NULL::integer,
+       'smoking_in_2_categories',
+       NULL::integer,
+       NULL::text,
+       NULL::text,
+       s.smoking_in_2_categories::text,
+       NULL::bigint,
+       NULL::integer
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+JOIN tb_cdm.visit_occurrence v ON v.person_id = p.person_id
+WHERE s.smoking_in_2_categories IS NOT NULL
+
+
+UNION ALL
+-- other_body_locations
+SELECT nextval('"tb_cdm".observation_id_seq'),
+       p.person_id,
+       0 AS observation_concept_id, -- other_body_locations
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD'),
+       NULL::timestamp,
+       32818,
+       NULL::numeric,
+       s.other_body_locations::text,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       v.visit_occurrence_id,
+       NULL::integer,
+       'other_body_locations',
+       NULL::integer,
+       NULL::text,
+       NULL::text,
+       s.other_body_locations::text,
+       NULL::bigint,
+       NULL::integer
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+JOIN tb_cdm.visit_occurrence v ON v.person_id = p.person_id
+WHERE s.other_body_locations IS NOT NULL
+
+UNION ALL
+-- other_body_locations
+SELECT nextval('"tb_cdm".observation_id_seq'),
+       p.person_id,
+       0 AS observation_concept_id, -- other_body_locations
+       TO_DATE(s.year_of_treatment_start::text || '-01-01','YYYY-MM-DD'),
+       NULL::timestamp,
+       32818,
+       NULL::numeric,
+       s.other_body_locations::text,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       NULL::integer,
+       v.visit_occurrence_id,
+       NULL::integer,
+       'other_body_locations',
+       NULL::integer,
+       NULL::text,
+       NULL::text,
+       s.other_body_locations::text,
+       NULL::bigint,
+       NULL::integer
+FROM tb_dgh_2009_2022 s
+JOIN tb_cdm.person p ON p.person_source_value = s.uniqueid
+JOIN tb_cdm.visit_occurrence v ON v.person_id = p.person_id
+WHERE s.other_body_locations IS NOT NULL;
+
+

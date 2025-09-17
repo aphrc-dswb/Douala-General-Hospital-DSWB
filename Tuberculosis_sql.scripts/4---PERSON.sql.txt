@@ -1,0 +1,60 @@
+-- PERSON
+-- Step 1: Ensure sequence exists for person_id
+CREATE SEQUENCE IF NOT EXISTS "tb_cdm"."person_id_seq"
+START WITH 1
+INCREMENT BY 1
+OWNED BY "tb_cdm"."person".person_id;
+
+-- Step 2: Insert into person table
+INSERT INTO "tb_cdm"."person"
+(
+    person_id,
+    gender_concept_id,
+    year_of_birth,
+    month_of_birth,
+    day_of_birth,
+    birth_datetime,
+    race_concept_id,
+    ethnicity_concept_id,
+    location_id,
+    provider_id,
+    care_site_id,
+    person_source_value,
+    gender_source_value,
+    gender_source_concept_id,
+    race_source_value,
+    race_source_concept_id,
+    ethnicity_source_value,
+    ethnicity_source_concept_id
+)
+SELECT
+    nextval('"tb_cdm"."person_id_seq"') AS person_id,
+
+    CASE 
+        WHEN LOWER(TRIM("sex")) IN ('male', 'm') THEN 8507
+        WHEN LOWER(TRIM("sex")) IN ('female', 'f') THEN 8532
+        ELSE 0 -- OMOP: No matching concept
+    END AS gender_concept_id,
+
+    ("year_of_treatment_start" - "age") AS year_of_birth,
+    NULL AS month_of_birth,
+    NULL AS day_of_birth,
+    NULL AS birth_datetime,
+
+    38003600 AS race_concept_id, -- African
+    38003564 AS ethnicity_concept_id, -- Not Hispanic or Latino
+
+    NULL AS location_id,
+    NULL AS provider_id,
+    NULL AS care_site_id,
+
+    uniqueid AS person_source_value,
+    "sex" AS gender_source_value,
+    NULL AS gender_source_concept_id,
+
+    NULL AS race_source_value,
+    NULL AS race_source_concept_id,
+    NULL AS ethnicity_source_value,
+    NULL AS ethnicity_source_concept_id
+
+FROM "tb_dgh_2009_2022";

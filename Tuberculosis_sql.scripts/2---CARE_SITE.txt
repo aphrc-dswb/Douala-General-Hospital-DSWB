@@ -1,0 +1,28 @@
+-- CARE_SITE
+-- Step 1: Ensure sequence exists for care_site_id
+
+CREATE SEQUENCE IF NOT EXISTS "tb_cdm"."care_site_id_seq"
+START WITH 1
+INCREMENT BY 1
+OWNED BY "tb_cdm"."care_site".care_site_id;
+
+-- Step 2: Set default value for care_site_id column using the sequence
+ALTER TABLE "tb_cdm"."care_site"
+ALTER COLUMN care_site_id SET DEFAULT nextval('"tb_cdm"."care_site_id_seq"');
+
+
+INSERT INTO tb_cdm.care_site
+(
+    care_site_name,
+    place_of_service_concept_id,
+    location_id,
+    care_site_source_value,
+    place_of_service_source_value
+)
+SELECT
+    'Douala General Hospital' AS care_site_name,
+    NULL AS place_of_service_concept_id,
+    1 AS location_id,
+    NULL AS care_site_source_value,
+    NULL AS place_of_service_source_value
+FROM "tb_dgh_2009_2022";

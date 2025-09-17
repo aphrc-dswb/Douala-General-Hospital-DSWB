@@ -1,0 +1,61 @@
+-- SPECIMEN
+-- Step 1: Ensure sequence exists
+CREATE SEQUENCE IF NOT EXISTS "tb_cdm".specimen_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    OWNED BY "tb_cdm".specimen.specimen_id;
+
+-- Step 2: Insert specimens
+INSERT INTO "tb_cdm".specimen (
+    specimen_id,
+    person_id,
+    specimen_concept_id,
+    specimen_type_concept_id,
+    specimen_date,
+    specimen_datetime,
+    quantity,
+    unit_concept_id,
+    anatomic_site_concept_id,
+    disease_status_concept_id,
+    specimen_source_id,
+    specimen_source_value,
+    unit_source_value,
+    anatomic_site_source_value,
+    disease_status_source_value
+)
+SELECT
+    nextval('"tb_cdm"."specimen_id_seq"') AS specimen_id,
+
+    person_id,
+
+    -- Map afb_collection to specimen_concept_id
+    CASE 
+        WHEN public.tb_dgh_2009_2022.afb_collection = 'Sputum' THEN 4002876
+        WHEN public.tb_dgh_2009_2022.afb_collection = 'Gastric_tubing' THEN 4057279
+        ELSE 1
+    END AS specimen_concept_id,
+
+    32818 AS specimen_type_concept_id,  -- EHR administration record
+
+    -- building specimen_date from year_of_treatment_start
+    CASE
+        WHEN "year_of_treatment_start" IS NOT NULL
+             THEN make_date("year_of_treatment_start"::int, 1, 1)
+        ELSE NULL
+    END AS specimen_date,
+
+    NULL::timestamp AS specimen_datetime,
+    NULL AS quantity,
+    NULL AS unit_concept_id,
+    NULL AS anatomic_site_concept_id,
+    NULL AS disease_status_concept_id,
+    NULL AS specimen_source_id,
+     public.tb_dgh_2009_2022.afb_collection  AS specimen_source_value,
+    NULL AS unit_source_value,
+    NULL AS anatomic_site_source_value,
+    NULL AS disease_status_source_value
+
+FROM public.tb_dgh_2009_2022
+LEFT JOIN "tb_cdm"."person"
+  ON "tb_cdm"."person".person_source_value = public.tb_dgh_2009_2022.uniqueid
+  WHERE afb_collection IS NOT NULL
