@@ -4,7 +4,7 @@ output:
   html_document: default
 ---
 
-# Data cleaning and descriptive analysis of respiratori disease dataset
+# Data cleaning and descriptive analysis of respiratory disease dataset
 
 #1- import all the packages
 
@@ -24,9 +24,9 @@ library(stringr)
 library(stringdist)
 library(text2vec)
 
-#creation of fontions 
+#creation of funtions 
 
-#creata a fonction
+#create a function
 
 harmonize_characters <- function(var) {
   var <- str_to_lower(var)                      
@@ -39,9 +39,11 @@ harmonize_characters <- function(var) {
 ```
 
 #2- IMPORT THE DATASET AND DATA DESCRIPTION
+# Provide file path for data
 
 ```{r warning=FALSE, include=FALSE}
-dataset <- read_excel("C:/Users/ekinz/OneDrive/Desktop/Respiratory diseases database eng_final.xlsx")
+datapath <- "LOCAL/FILEPATH"
+dataset <- read_excel(datapath)
 ```
 
 #3. DATA PREPROCESSING AND CLEANING
